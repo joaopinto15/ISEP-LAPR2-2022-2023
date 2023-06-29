@@ -1,0 +1,53 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD)
+
+autonumber
+
+actor "Unregistered user" as Client
+participant ":System" as System
+  activate Client
+
+autonumber 1
+opt sort
+    Client -> System : asks to sort properties
+    activate System
+
+        System --> Client : shows type of filters and ask's to select
+    deactivate System
+
+    Client -> System : selects a task category(price or parish)
+    activate System
+
+        System --> Client : shows selected category and requests the data
+    deactivate System
+
+    Client -> System : type of sort(price high to low, price low to high, parish)
+
+end
+
+autonumber 1
+opt filter
+    Client -> System : asks to filter properties
+    activate System
+
+        System --> Client : shows the category of filters and ask's to select
+    deactivate System
+
+    Client -> System : selects a task category(bedrooms, bathrooms,\n type of contract and type of property)
+    activate System
+
+        System --> Client : shows selected category and requests the data
+    deactivate System
+
+    Client -> System : types the chosen filters (rent, buy,number of rooms,number of bathrooms, land, house, apartament)
+end
+    System --> Client : results
+    System --> Client:shows list of properties
+
+
+
+@enduml

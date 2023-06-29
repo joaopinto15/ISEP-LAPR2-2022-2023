@@ -1,0 +1,50 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+'skinparam linetype ortho
+left to right direction
+'skinparam classAttributeIconSize 0
+hide circle
+hide methods
+'---------File styling---------
+skinparam class {
+    BackgroundColor PeachPuff
+    ArrowColor RoyalBlue
+    BorderColor RoyalBlue
+}
+'------------|Actors|----------------
+class Person {
+    - name
+    - passportCardNumber
+    - taxNumber
+    - email
+    - phoneNumber
+    - password
+}
+class Client{
+
+}
+class "Property Owner" as PO {
+
+}
+class Address{
+    - street
+    - zipCode
+    - State
+    - District
+    - City
+}
+
+'-------------------connections------------------
+
+
+Person "1" -- "1" Client : can be >
+Person "1" -- "1" PO : can be >
+
+Person "1" *- "0..*" Address : has >
+'--------------------heritage--------------------
+
+
+
+@enduml

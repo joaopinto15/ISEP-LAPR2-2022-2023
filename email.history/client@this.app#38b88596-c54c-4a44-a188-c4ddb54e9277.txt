@@ -1,0 +1,23 @@
+#-#-#-#-#-#-#
+From: John Doe at Real Estate USA <noreply@example.com> Phone number:123456789
+To: client@this.app
+Subject: Order validation!
+ Date: Monday, 19 of June of 2023
+Time: 09:01:28 AM
+
+Agent Message:
+  You order was not accepted
+
+Luis:
+
+     -> Passport Number: 123456789
+     -> Tax number: 123456789
+     -> Email address: client@this.app
+     -> Phone number: 123456789
+   Price:10000.0$
+   Date:Monday, 19 of June of 2023
+
+Address: Street: Rua da Liberdade | City: São Paulo | District: Liberdade | State: SP | Zipcode: 12345
+
+This is an automated message from the system. Please do not reply to this email.
+#-#-#-#-#-#-#

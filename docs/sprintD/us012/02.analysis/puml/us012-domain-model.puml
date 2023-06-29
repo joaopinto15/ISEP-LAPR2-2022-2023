@@ -1,0 +1,158 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+'skinparam linetype ortho
+left to right direction
+'skinparam classAttributeIconSize 0
+hide circle
+hide methods
+'---------File styling---------
+skinparam class {
+    BackgroundColor PeachPuff
+    ArrowColor RoyalBlue
+    BorderColor RoyalBlue
+}
+'------------|Actors|----------------
+'|Persons|
+class Person {
+    - name
+    - passportNumber
+    - taxNumber
+    - email
+    - phoneNumber
+    - password
+}
+'|Employees|
+class Employee {
+    - agencyDesignation
+}
+class Agent{
+
+}
+
+'|Clients|
+class "Property Owner" as PO {
+
+}
+
+class Property{
+    - type
+    - area 
+    - distanceFromCityCenter
+    - photoURL
+
+}
+class Home {
+    - numberOfbedrooms
+    - numberOfbathrooms
+    - numberOfParkingSpace
+    - availableEquipment
+}
+class Land{
+
+}
+class Apartment{
+
+}
+class House{
+    - basement
+    - inhabitableLoft
+    - sunExposure
+}
+class Announcement{
+    - id 
+    - state   
+}
+class Agency{
+    - id 
+    - designation
+    - phoneNumber
+    - email
+}
+class Commission {
+    -type
+    -value
+}
+
+class Prediction {
+    -value
+}
+
+class Address{
+    -street 
+    -city 
+    -state 
+    -zipcode
+}
+class Role{
+    -id
+    -description
+}
+class Order {
+    - requestPrice
+    - date
+}
+class Deal{
+    - dealType
+}
+class Sale{
+    - propertyPrice
+}
+class Rent{
+    - propertyRent
+    - contractDuration
+}
+'-------------------connections------------------
+'Property Owner
+PO "1" -- "1..*" Announcement : request >
+'Announcement
+Announcement "1" -- "1" Property : has >
+Announcement "1" -- "1" Agent : send to >
+
+'Agency
+Agency "1" -- "1..*" Agent : has >
+Agency "1" -- "1" Address : has >
+
+
+'Agent
+Commission "1" -- "1" Announcement : has <
+Agent "1" -- "1..*" Commission : set >
+Agent "1" -- "*" Announcement : publishes >
+Agent "1" -- "*" Prediction : makes >
+
+
+'Employee
+Employee "1" -- "*" Agent : can be >
+Employee "1" -- "*" Role : has a >
+
+'Client 
+
+Client "1" -- "1" Order : makes >
+
+'Order
+Order "1" -- "1" Announcement : has >
+'Person
+Person "1" -- "*" Client: can be >
+Person "1" -- "*" PO : can be >
+Person "1" -- "1,0" Address : has >
+
+'Property
+Property "1" -- "1" Address : has >
+
+
+'Announcement
+Property "1" -- "1" Deal : has >
+
+'Deal
+Deal *-- Sale 
+Deal *-- Rent
+'--------------------heritage--------------------
+.Property <|-- .Land : is a 
+.Property <|-- .Home : is a
+.Home <|-- .Apartment : is a
+.Home <|-- .House : is a
+
+.Person <|-- .Employee : is a
+
+@enduml

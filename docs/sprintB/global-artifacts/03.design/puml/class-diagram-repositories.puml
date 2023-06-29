@@ -1,0 +1,184 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+'skinparam linetype orto
+
+skinparam classAttributeIconSize 0
+'---------File styling---------
+skinparam class {
+    BackgroundColor PeachPuff
+    ArrowColor RoyalBlue
+    BorderColor RoyalBlue
+}
+'left to right direction
+'User interface'
+
+class Repositories{
+    -Repositories()
+    +getInstance() : Repositories
+    +getAgencyRepository()
+    +getUserRepository()
+    +getEmployeeRepository()
+    +getAnnouncementRepository()
+    +getAuthenticationRepository()
+}
+class AgencyRepository{
+    
+}
+class Agency {
+    -String id
+    -String designation
+    -int phoneNumber
+    -String emailAddress
+    - Address address
+}
+class Request{
+    - Property property
+    - Employee employee
+    - User user
+}
+abstract class Property{
+    - double areaInM2
+    - double distanceFromCityCenter
+    - ArrayList <String> photoURL
+    - String typeProperty
+    - Address address
+    - Deal deal
+}
+abstract class Home{
+    -int numberOfBedrooms
+    -int numberOfBathrooms
+    -int numberOfParkingSpace
+    -ArrayList <String> availableEquipment
+}
+class House{
+    - boolean basement
+    - boolean inhabitableLoft
+    - String sunExposure
+}
+class Appartement{
+    
+}
+class Land{
+
+}
+abstract class Deal {
+    - enum public DealType
+    + Deal(DealType:dealType)
+}
+class Sale {
+    - double propertyPrice
+    + createSale(propertyPrice)
+}
+class Rent{
+    - double propertyRent
+    - int contractDuration
+    + createRent(propertyRent, contractDuration)
+}
+class UserRepository{
+
+}
+class User{
+    -Person person
+}
+class EmployeeRepository{
+
+}
+class Employee{
+    -Agency agency
+    -Person person
+    -Role Role
+}
+class Staff{
+    -Person person
+    -Role role
+
+}
+class AnnouncementRepository{
+
+}
+class Announcement{
+    - Commission commission
+}
+class AuthenticationRepository{
+
+}
+class AuthFacade{
+
+}
+class Person{
+    - String name
+    - int passportNumber
+    - int taxNumber
+    - String emailAddress
+    - int phoneNumber
+    - Address address
+}
+class Address {
+    - String street
+    - String city
+    - String district
+    - String state
+    - int zipcode
+}
+class Role{
+    - id
+    - description
+}
+class Commission{
+    - commissionType
+    - commissionValue
+}
+class EmailRepository{
+
+}
+
+
+Repositories --> Repositories : instance
+Repositories --> AgencyRepository
+Repositories --> UserRepository
+Repositories --> EmployeeRepository
+Repositories --> AnnouncementRepository
+Repositories --> AuthenticationRepository
+Repositories --> EmailRepository
+
+'AgencyRepository
+AgencyRepository ..> Agency
+Agency *-- Address
+Announcement *-- Commission
+Request *-- Property
+Request *-- Employee
+Request *-- User
+Deal <|-- Sale
+Deal <|-- Rent
+Property *-- Deal
+Property <|-- Land
+Property <|-- Home
+Property *-- Address
+Home <|-- House
+Home <|-- Appartement
+'UserRepository
+UserRepository ..> User
+User --* Person
+User *-- Role
+
+'EmployeeRepository
+EmployeeRepository ..> Employee
+EmployeeRepository ..> Staff
+Employee *-- Person
+Employee *-- Role
+Employee *-- Agency
+Staff *-- Role
+
+Staff --* Person
+'AnnouncementRepository
+AnnouncementRepository ..> Request
+Request <|-- Announcement
+'AuthenticationRepository
+AuthenticationRepository ..> AuthFacade
+
+Person *-- Address
+
+@enduml

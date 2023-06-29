@@ -1,0 +1,67 @@
+@startuml
+skinparam monochrome false
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+'hide footbox
+actor "Network Manager" as NM
+participant ":PropertyServiceUI" as UI
+participant ":PropertyServiceController" as CTRL
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant "AgencyRepository:\nAgencyRepository" as AgencyRepository
+
+
+activate NM
+
+        NM -> UI : asks to see agencies subsets
+
+        activate UI
+
+        UI -> CTRL** : create
+
+
+UI -> CTRL : getAgencies()
+activate CTRL
+
+CTRL -> RepositorySingleton : getInstance()
+activate RepositorySingleton
+
+RepositorySingleton --> CTRL: repositories
+deactivate RepositorySingleton
+
+CTRL -> PLAT : getAgencyRepository()
+activate PLAT
+
+PLAT --> CTRL: AgencyRepository
+deactivate PLAT
+
+CTRL -> AgencyRepository : getAgencies()
+activate AgencyRepository
+
+AgencyRepository --> CTRL : Agencies
+deactivate AgencyRepository
+
+CTRL -> CTRL : int j = 0
+loop AgenciesDto
+alt j is pair
+CTRL -> CTRL : save in Alpha set
+
+else j is odd
+CTRL -> CTRL : save in Beta set
+end
+
+CTRL -> CTRL : j++
+
+end
+
+CTRL -> UI : Alpha set and Beta set Dto's
+deactivate CTRL
+
+UI --> NM : show Alpha set and Beta set
+
+deactivate CTRL
+               
+@enduml

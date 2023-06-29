@@ -1,0 +1,119 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam line type polyline
+'skinparam line-type onto
+
+'skinparam classAttributeIconSize 0
+'---------File styling---------
+skinparam class {
+    BackgroundColor PeachPuff
+    ArrowColor RoyalBlue
+    BorderColor RoyalBlue
+}
+'left to right direction
+'User interface'
+
+class Repositories{
+    - Repositories()
+    + getInstance() : Repositories
+    + getAnnouncementRepository()
+}
+
+class AnnouncementRepository {
+    + getNotSoldAnnouncementList()
+    + removeAnnouncement(chosenAnnouncement)
+    +removeOrderFromAnnouncement(chosenAnnouncement, chosenOrder)
+}
+
+class OrderCheckUI{
+}
+
+class OrderCheckController{
+    + getAnnouncementsByDate()
+    + getOrdersByPrice(AnnouncementDTO)
+    + acceptOrder(AnnouncementDTO announcementDto, OrderDTO orderDto)
+    + removeOrder(AnnouncementDTO announcementDto, OrderDTO orderDto)
+    + notifyClient(Person person, Announcement announcement, boolean wasAccepted)
+}
+
+class Order{
+    - Person person
+    - double price
+    - Date date
+    + selectOrder(Announcement)
+    + validateOrder(announcement, chosenOrder)
+}
+
+class Person{
+    - String name
+    - int passportNumber
+    - int taxNumber
+    - Email email
+    - String phoneNumber
+    - Address address
+}
+
+class Address{
+    - String street
+    - String city
+    - String district
+    - String state
+    - int zipcode
+}
+
+class Announcement {
+    - Request request
+    - Commission commission
+    - Date date
+    - boolean sold
+    - ArrayList <Order> orders
+    + selectAnnouncement()
+}
+
+class Message {
+    - String subject
+    - Employee from
+    - Email to
+    - String messageBody
+    + send()
+    + save()
+}
+
+class Orders {
+    - ArrayList <Order> orders
+}
+
+class Date {
+   - int year
+   - int month
+   - int day
+}
+
+'User Interface
+OrderCheckUI --> OrderCheckController
+
+'Controller
+OrderCheckController --> Repositories
+OrderCheckController --> Order
+OrderCheckController --> Message
+
+'Repositories
+Repositories --> Repositories : instance
+Repositories --> AnnouncementRepository
+
+'Order
+AnnouncementRepository ..> Announcement
+Order "1"-- "1" Person
+Order "1"-- "1" Date
+
+'Announcement
+Announcement --  Orders
+Announcement "1"-- "1" Date
+Orders "1" -- "*" Order
+
+'Person
+Person "1"-- "1" Address
+
+@enduml

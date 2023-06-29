@@ -1,0 +1,65 @@
+@startuml
+skinparam monochrome false
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD)
+
+' File sytling
+
+'alt sytling
+skinparam SequenceGroupHeaderFontColor green
+skinparam SequenceGroupFontColor blue
+skinparam SequenceGroupFontSize 15
+'Middle text styling
+'skinparam sequenceMessageAlign center
+'skinparam sequenceMessageAlign direction
+autonumber
+
+actor "Client" as Client #LightGreen
+participant ":System" as System
+
+    Client -> System : asks to purchase a property
+    activate System
+    System --> Client : shows all announcements and ask to select one
+    deactivate System
+    Client -> System : selects an announcement 
+    activate System
+    opt if there is a pending offer
+
+        System --> Client : asks the user to wait until the pending request is either accepted or rejected
+
+    end
+    loop While  requestPrice <= advertisementPrice
+
+        System --> Client : requests the price
+        deactivate System
+
+        Client -> System : types data
+        activate System
+    end
+    note right
+     -> the request price, need to be lower or equal,
+        to the advertisement price
+
+     -> if the requested price has already been posted
+        by other user, the system must state that and the 
+        order placed previously should be considered first.
+    end note
+    autonumber 6.1
+    alt if requestPrice = other requestPrice
+
+    System --> Client : displays that there is already an order request\n with the same price and requests confirmation
+    
+    else
+    System --> Client : shows all data and requests cofirmation
+    deactivate System
+    end
+    autonumber 7
+    Client -> System : confirms the data
+    activate System
+
+    System --> Client : informs operation sucess
+
+
+@enduml

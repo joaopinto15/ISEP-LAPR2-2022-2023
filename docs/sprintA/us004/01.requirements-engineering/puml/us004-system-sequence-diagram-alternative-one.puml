@@ -1,0 +1,111 @@
+@startuml
+skinparam monochrome false
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD) - Alternative One
+
+' File sytling 
+
+'alt sytling
+skinparam SequenceGroupHeaderFontColor green
+skinparam SequenceGroupFontColor blue
+skinparam SequenceGroupFontSize 15
+'Middle text styling
+'skinparam sequenceMessageAlign center
+'skinparam sequenceMessageAlign direction
+autonumber
+
+actor "Proprety Owner" as PO
+ 
+participant ":System" as System
+
+activate PO
+        PO -> System : asks to listing a property
+    activate System
+    alt registered user
+        System --> PO : auto fills the user information
+
+    else unregistered user
+        autonumber 2.1
+        System --> PO : asks to users information (name, citizenCardNumber,taxNumber,address,email,phoneNumber)
+        PO -> System : types the requested data
+    end   
+    autonumber 3
+        System --> PO : shows the list of agencies available and asks to select one
+    deactivate System
+
+        PO -> System : selects a agency
+    activate System
+
+        System --> PO : shows the list of agents available and asks to select one or use a feature to select a random agent
+    deactivate System
+    alt Select a agent
+            PO -> System : selects a agent
+        activate System
+    else random feature
+            PO -> System : randomly assing one agent
+    end
+
+        System --> PO : requests the property type (house,apartment,land) and business type (sell or rent)
+    deactivate System
+
+        PO -> System : types the requested data
+    activate System
+
+    
+        'if statement
+        alt land
+            alt sell
+                autonumber 9
+                System-->PO : request the land characteristics 
+                PO -> System : types requested data
+                
+            else rent
+                autonumber 9
+                System-->PO : request the land characteristics and the contract duration
+                PO -> System : types requested data
+
+            end
+
+        else apartment
+            alt sell
+                autonumber 9
+                System-->PO : request the apartment characteristics 
+
+                PO -> System : types requested data
+
+            else rent
+                autonumber 9
+                System-->PO : request the apartment characteristics and the contract duration
+
+                PO -> System : types requested data
+
+            end
+        else house
+            alt sell
+                autonumber 9
+                System-->PO : request the house characteristics
+
+                PO -> System : types requested data
+
+            else rent 
+                autonumber 9
+                System-->PO : request the house characteristics and the contract duration
+
+                PO -> System : types requested data
+
+            end
+        end
+        autonumber 11
+        System --> PO : shows the data and asks to confirmation
+    deactivate System
+
+        PO -> System : confirms the data
+    activate System
+
+    'Final Part
+        System --> PO : Displays operation success
+    deactivate System
+
+@enduml

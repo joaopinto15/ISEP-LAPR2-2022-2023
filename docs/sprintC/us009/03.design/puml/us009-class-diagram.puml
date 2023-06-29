@@ -1,0 +1,96 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+'skinparam linetype ortho
+'left to right direction
+skinparam classAttributeIconSize 0
+'---------File styling---------
+skinparam class {
+    BackgroundColor PeachPuff
+    ArrowColor RoyalBlue
+    BorderColor RoyalBlue
+}
+class ScheduleUI {
+  +displayMessage(message: String): void
+
+}
+
+class VisitController {
+  -visitRepository: VisitRepository
+  -authenticationRepository: AuthenticationRepository
+  -personRepository: PersonRepository
+  -currentPerson: Person
+
+  +saveVisit(visit:Visit)
+  +create(): void
+  +getCurrentPerson(): Person
+  +sendRequest(propertyData: PropertyData): void
+}
+
+class AnnouncementController {
+  -announcementRepository: AnnouncementRepository
+  +getAnnouncementList(): List<Announcement>
+}
+
+class Repository {
+  +getInstance(): Repository
+  -announcementRepository: AnnouncementRepository
+  -authenticationRepository: AuthenticationRepository
+  -personRepository: PersonRepository
+  -visitRepository: VisitRepository
+  -propertiesRepository: PropertiesRepository
+  +getAnnouncementRepository(): AnnouncementRepository
+  +getAuthenticationRepository(): AuthenticationRepository
+  +getPersonRepository(): PersonRepository
+  +getVisitRepository(): VisitRepository
+  +getPropertiesRepository(): PropertiesRepository
+}
+
+class AnnouncementRepository {
+  +getAnnouncementList(): List<Announcement>
+}
+
+class AuthenticationRepository {
+  +getCurrentUserSession(): UserSession
+}
+
+class PersonRepository {
+  +getPersonById(personId: String): Person
+}
+
+class VisitRepository {
+  +saveVisit( visit:Visit)
+
+}
+
+
+
+class UserSession {
+  +getId(): String
+  +getUserId(): String
+}
+
+class Person {
+  +name: String
+  +phoneNumber: String
+  +email: String
+}
+
+ScheduleUI --> VisitController
+ScheduleUI --> AnnouncementController
+VisitController --> Repository
+AnnouncementController --> Repository
+VisitController --> VisitRepository
+VisitController --> AuthenticationRepository
+VisitController --> PersonRepository
+Repository --> AnnouncementRepository
+Repository --> AuthenticationRepository
+Repository --> PersonRepository
+Repository --> VisitRepository
+PersonRepository ..> AuthenticationRepository
+
+AuthenticationRepository --> UserSession
+PersonRepository --> Person
+
+@enduml

@@ -1,0 +1,98 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+'skinparam linetype orto
+
+'skinparam classAttributeIconSize 0
+'---------File styling---------
+skinparam class {
+    BackgroundColor PeachPuff
+    ArrowColor RoyalBlue
+    BorderColor RoyalBlue
+}
+'left to right direction
+'User interface'
+
+class Repositories{
+    -Repositories()
+    +getInstance() : Repositories
+    +getAnnouncementRepository()
+    
+}
+class OrderRequestUI{
+    
+}
+class OrderRequestController{
+    +getAnnouncements()
+    +getOrders(Announcement announcement)
+    +addOrder(Announcement announcement, Order order)
+    +isRequestPriceUnique(double offer, Announcement announcement)
+    +isRequestPriceIsHigherThanAnnouncementPrice(double offer, Announcement announcement)
+}
+class Order{
+    - Person person
+    - double price
+    - Date date
+}
+class Person{
+    - String name
+    - int passportNumber
+    - taxNumber
+    - Email email
+    - String phoneNumber
+    - Address address
+}
+class Address{
+    - String street 
+    - String city
+    - String district
+    - String state
+    - int zipcode
+}
+class Announcement {
+    - Property property
+    - Employee employee
+    - User user
+    - ArrayList <Order> orders
+    +checkIfRequestPriceIsLowerThanAdvertisementPrice(requestPrice, announcement)
+}
+class Orders{
+    -ArrayList <Order> orders
+    +Orders()
+    +checkIfRequestPriceIsUnique(requestPrice, announcement)
+    + createOrder(requestPrice, user, date)
+
+}
+class Date{
+    - int day
+    - int month
+    - int year
+}
+class AnnouncementRepository{
+    +getNotSoldAnnouncementList()
+}
+'User Interface
+OrderRequestUI --> OrderRequestController
+
+'Controller
+OrderRequestController --> Repositories
+OrderRequestController --> Order
+
+'Repositories
+Repositories --> Repositories : instance
+Repositories --> AnnouncementRepository
+
+'Order
+AnnouncementRepository ..> Announcement
+Order *-- Person
+Order *-- Date
+Announcement "1"-- "1" Orders
+
+Orders "1" -- "*" Order
+'Person
+Person *-- Address
+
+
+@enduml

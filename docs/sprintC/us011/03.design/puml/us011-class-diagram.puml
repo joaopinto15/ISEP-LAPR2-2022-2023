@@ -1,0 +1,119 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+'skinparam linetype orto
+
+'skinparam classAttributeIconSize 0
+'---------File styling---------
+skinparam class {
+    BackgroundColor PeachPuff
+    ArrowColor RoyalBlue
+    BorderColor RoyalBlue
+}
+'left to right direction
+'User interface'
+
+class Repositories{
+    - Repositories()
+    + getInstance() : Repositories
+    + getAuthenticationRepository()
+    + getPersonRepository()
+    + getAnnouncementRepository()
+}
+
+class AnnouncementRepository {
+    + getAnnouncementList()
+    + removeAnnouncement(announcement)
+}
+
+class PersonRepository {
+    + getPersonById(idInSession)
+}
+
+class AuthenticationRepository {
+    + getCurrentUserSession().getUserId()
+}
+
+class OrderCheckUI{
+}
+
+class OrderCheckController{
+    + getAnnouncementsByOrder()
+    + getOrdersByOrder()
+    + acceptThisOrder(Announcement announcement, Order chosenOrder)
+    + removeThisOrder(Announcement announcement, Order chosenOrder)
+    + notifyClient(Person person, boolean wasAccepted)
+}
+
+class Order{
+    - Person person
+    - double price
+    - Date date
+    + selectOrder(Announcement announcement)
+    + validateOrder(announcement, chosenOrder)
+}
+
+class Person{
+    - String name
+    - int passportNumber
+    - int taxNumber
+    - Email email
+    - String phoneNumber
+    - Address address
+}
+
+class Address{
+    - String street
+    - String city
+    - String district
+    - String state
+    - int zipcode
+}
+
+class Announcement {
+    - Property property
+    - Employee employee
+    - User user
+    - ArrayList <Order> orders
+    + selectAnnouncement()
+}
+
+class Orders{
+    - ArrayList <Order> orders
+}
+
+class User {
+    - Email id
+    - Password pwd
+    - String name
+    + User(id, pwd, name)
+}
+
+'User Interface
+OrderCheckUI --> OrderCheckController
+
+'Controller
+OrderCheckController --> Repositories
+OrderCheckController --> Order
+
+'Repositories
+Repositories --> Repositories : instance
+Repositories --> AnnouncementRepository
+Repositories --> PersonRepository
+Repositories --> AuthenticationRepository
+
+'Order
+AnnouncementRepository ..> Announcement
+AuthenticationRepository ..> User
+PersonRepository ..> Person
+Order *-- Person
+Announcement "1"-- "1" Orders
+
+Orders "1" -- "*" Order
+
+'Person
+Person *-- Address
+
+@enduml

@@ -1,0 +1,112 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+'hide footbox
+actor "Client" as CL
+participant "ScheuduleUI" as UI
+participant "visitController\n:VisitController" as V.CTRL
+participant "annoucementController\n:AnnoucementController" as A.CTRL
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as REP
+participant "annoucementRepository:\nAnnoucementRepository" as annoucementRepository
+participant "authenticationRepository:\nAuthenticationRepository" as authenticationRepository
+participant "personRepository:\nPersonRepository" as peronRepository
+participant "visitRepository:\nVisitRepository" as VisitRepository
+
+
+
+activate CL
+
+        CL -> UI : Ask to scheudule a vist
+
+        activate UI
+            UI -> V.CTRL** : create
+
+
+
+                    V.CTRL -> RepositorySingleton : getInstance()
+                    activate RepositorySingleton
+
+                        RepositorySingleton --> V.CTRL: repositories
+                    deactivate RepositorySingleton
+
+
+                      V.CTRL -> REP : getAnnoucementRepository()
+                       activate REP
+
+                REP --> V.CTRL: getAnnoucementRepository
+                V.CTRL -> annoucementRepository: getAnnouncementList()
+                activate annoucementRepository
+                annoucementRepository-->V.CTRL:getAnnouncementList
+                deactivate annoucementRepository
+
+
+                deactivate REP
+                V.CTRL-->UI:annoucementList
+
+                UI-->CL:display properties and requeste one
+
+
+
+        deactivate UI
+
+
+         V.CTRL -> REP : getVisitRepository()
+      activate REP
+          REP --> V.CTRL: visitRepository
+V.CTRL -> REP : authenticationVisitRepository()
+
+
+        REP --> V.CTRL: authenticationRepository
+
+      deactivate REP
+      V.CTRL-> authenticationRepository: getCurrentUserSession().getId()
+
+      activate authenticationRepository
+      authenticationRepository-->V.CTRL: email
+      deactivate authenticationRepository
+
+      deactivate V.CTRL
+
+             UI->V.CTRL:getCurrentPerson()
+
+        activate UI
+             V.CTRL->peronRepository:getPersonById(AuthenticationRepository.getCurrentUserSession().getUserId())
+             activate peronRepository
+             peronRepository-->V.CTRL: currentPerson: Person
+             deactivate peronRepository
+             V.CTRL-->UI: name,phoneNumber,email
+        deactivate UI
+
+
+
+      UI->CL:reques data(property,date,starVisit,endVisit)
+      CL->UI: types data(property,date,starVisit,endVisit)
+
+      UI->V.CTRL: sendRequest(name,email,phone number,property,date,starVisit,endVisit)
+
+      V.CTRL->VisitRepository:sendRequest(name,email,phone number,property,date,starVisit,endVisit)
+      activate VisitRepository
+
+
+alt visit is overlapping with previous scheudule visits
+VisitRepository-->V.CTRL:false
+V.CTRL --> UI : Send message (visit overlaps with existing visits)
+deactivate V.CTRL
+
+UI --> CL : Display message (visit overlaps with previous scheudule visits)
+
+else visit is available
+VisitRepository --> V.CTRL : true
+deactivate VisitRepository
+V.CTRL --> UI : Send message (success)
+deactivate V.CTRL
+
+UI --> CL : Display message (success)
+
+end
+@enduml

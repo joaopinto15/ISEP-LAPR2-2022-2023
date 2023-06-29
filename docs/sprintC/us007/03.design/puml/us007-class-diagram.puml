@@ -1,0 +1,88 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+'skinparam linetype orto
+
+skinparam classAttributeIconSize 0
+
+class User {
+    - name
+    - passportNumber
+    - taxNumber
+    - email
+    - phoneNumber
+    - password
+    + User(name, passportnumber, tax number\n, address, email,phone number, password )
+}
+class Repositories {
+    - Repositories()
+    + getInstance() : Repositories
+    + getUsersRepository()
+    + getAuthFacade()
+
+}
+class UsersRepository{
++registerUser(name, passportnumber, tax number\n, address, email,phone number, password)
++validateUser(user)
++saveUser(user)
+}
+
+
+class AuthFacade{
++boolean addUserRole(String id, String description)
++boolean addUser(String name, String email, String pwd)
++boolean addUserWithRole(String name, String email, String pwd, String roleId)
++boolean addUserWithRoles(String name, String email, String pwd, String[] rolesId)
++boolean existsUser(String email)
++UserSession doLogin(String email, String password)
++UserSession getCurrentUserSession()
++void doLogout()
+}
+
+class UserSession{
+  +boolean isLoggedIn()
+  +boolean isLoggedInWithRole(String roleId)
+  +String getUserName()
+  +Email get UserId()
+  + doLogin(String email, String password)
+}
+
+
+class RegisterUserController {
+  +registerUser(name, passportnumber, tax number\n, address, email,phone number, password)
+  +saveUser()
+}
+
+class RegisterUserUI {
+
+}
+class Address {
+  -String street
+  -String city
+  -String state
+  -String zipcode
+  +Address(street, city, state, zipcode)
+}
+'UI
+RegisterUserUI ..> RegisterUserController
+
+'Controller
+RegisterUserController ..> AuthFacade
+RegisterUserController ..> UsersRepository
+RegisterUserController ..> Repositories : repositories
+'Repositories
+Repositories --> Repositories : instance
+Repositories --> UsersRepository
+Repositories --> AuthFacade
+
+'AuthFacade
+AuthFacade ..> UserSession
+'/User ..> UserSession'/
+
+UsersRepository ..> User
+'User
+User "1" --> "1" Address
+
+@enduml

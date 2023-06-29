@@ -1,0 +1,89 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+'skinparam linetype orto
+
+skinparam classAttributeIconSize 0
+
+class User {
+    - name
+    - passportNumber
+    - taxNumber
+    - email
+    - phoneNumber
+    - password
+    + User(name, passportnumber, tax number\n, address, email,phone number, password )
+}
+class Repositories {
+    - Repositories()
+    + getInstance() : Repositories
+    + getPersonRepository()
+    + getAuthenticationRepository()
+
+}
+class PersonRepository{
++addPerson(name, passportnumber, tax number\n, address, email,phone number, password)
++validatePerson(user)
++savePerson(user)
+}
+
+
+class AuthenticationRepository{
+    +doLogin(email,pwd)
+    +doLogout()
+    +getCurrentSession()
+    +addUserRole()
+    +addUserWithRole()
+    +passwordGenerator()
+    +updateUser()
+    +getUser()
+}
+
+class UserSession{
+  +boolean isLoggedIn()
+  +boolean isLoggedInWithRole(String roleId)
+  +String getUserName()
+  +Email get UserId()
+  + doLogin(String email, String password)
+}
+
+
+class RegisterUserController {
+  +registerUser(name, passportnumber, tax number\n, address, email,phone number, password)
+  +saveUser()
+  +generatePassword()
+}
+
+class RegisterUserUI {
+
+}
+class Address {
+  -String street
+  -String city
+  -String state
+  -String zipcode
+  +Address(street, city, state, zipcode)
+}
+'UI
+RegisterUserUI ..> RegisterUserController
+
+'Controller
+RegisterUserController ..> AuthenticationRepository
+RegisterUserController ..> PersonRepository
+RegisterUserController ..> Repositories : repositories
+'Repositories
+Repositories --> Repositories : instance
+Repositories --> PersonRepository
+Repositories --> AuthenticationRepository
+
+'AuthenticationRepository
+AuthenticationRepository ..> UserSession
+'/User ..> UserSession'/
+
+PersonRepository ..> User
+'User
+User "1" --> "1" Address
+
+@enduml

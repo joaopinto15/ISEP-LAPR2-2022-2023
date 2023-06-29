@@ -1,0 +1,65 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+'skinparam linetype ortho
+left to right direction
+'skinparam classAttributeIconSize 0
+hide circle
+hide methods
+'---------File styling---------
+skinparam class {
+    BackgroundColor PeachPuff
+    ArrowColor RoyalBlue
+    BorderColor RoyalBlue
+}
+'------------|Actors|----------------
+'|Persons|
+
+Class Visit{
+    - date
+}
+
+Class Agent {
+}
+
+Class Client {
+}
+
+Class Property {
+    - typeOfProperty
+    - area
+    - distanceFromCityCenter
+    - photoURL
+    - address
+    - deal
+}
+
+Class Announcement {
+    - commission
+    - date
+}
+
+Class Person {
+    - name
+    - passportNumber
+    - taxNumber
+    - emailAddress
+    - phoneNumber
+}
+
+Class Employee {
+    - address
+    - agencyId
+}
+
+
+Client "1" -- "1" Visit : Schedule a >
+Announcement "1" -- "1" Visit : has a >
+Announcement "1" -- "1" Agent : has an >
+Agent "1" -- "*" Visit : confirms >
+Announcement "1" -- "1" Property : has a >
+Person <|-- Client : is a
+Employee <|-- Agent : is a
+Person <|-- Employee : is a
+@enduml

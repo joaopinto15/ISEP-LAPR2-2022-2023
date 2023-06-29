@@ -1,0 +1,32 @@
+@startuml
+skinparam monochrome false
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD)
+
+skinparam SequenceGroupHeaderFontColor green
+skinparam SequenceGroupFontColor #blue
+skinparam SequenceGroupFontSize 15
+
+autonumber
+
+actor "Agent" as AGT  #blue
+participant ":System" as System
+
+activate AGT
+
+AGT -> System : asks to see the list of booking requests
+activate System
+
+System --> AGT :Requests the specific period (begin date and end date)
+deactivate System
+
+AGT-> System : Types requested data
+activate System
+
+System -->AGT :shows the list of booking requests
+deactivate System
+
+
+@enduml

@@ -1,0 +1,42 @@
+@startuml
+skinparam monochrome false
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD)
+
+' File sytling
+
+'alt sytling
+skinparam SequenceGroupHeaderFontColor green
+skinparam SequenceGroupFontColor blue
+skinparam SequenceGroupFontSize 15
+'Middle text styling
+'skinparam sequenceMessageAlign center
+'skinparam sequenceMessageAlign direction
+autonumber
+
+actor "Network Manager" as NM #LightGreen
+participant ":System" as System
+
+NM->System:Choose an algorithm(Bubble sort or selectionSort).
+activate System
+System--> NM: aks to select the type of sort(ascending or descending).
+deactivate System
+NM-> System: select the  type of sort method.
+
+activate System
+
+System--> NM: aks to insert values(numbers).
+deactivate System
+
+NM-> System: insert the data.
+activate System
+
+System-->NM:display the values sy the sort type.
+deactivate System
+
+
+
+
+@enduml

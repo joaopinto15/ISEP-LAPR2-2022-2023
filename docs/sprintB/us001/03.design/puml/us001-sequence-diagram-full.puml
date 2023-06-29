@@ -1,0 +1,95 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+'hide footbox
+actor "UnregisteredUser" as ADM
+participant "ListPropertiesUI" as UI
+participant ":ListPropertiesController" as CTRL
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant "Propertyrepository:\nPropertyrepository" as TaskCategoryRepository
+
+
+
+
+
+activate ADM
+
+        ADM -> UI : asks to shows properties
+
+        activate UI
+
+'            UI --> ADM : requests data (reference, description,  informal \n description, technical description, duration, cost)
+            'create CTRL
+            UI -> CTRL** : create
+
+
+            activate CTRL
+
+                CTRL -> RepositorySingleton : getInstance()
+                activate RepositorySingleton
+
+                    RepositorySingleton --> CTRL: repositories
+                deactivate RepositorySingleton
+
+                CTRL -> PLAT : getPropertiesRepository()
+                activate PLAT
+
+                    PLAT --> CTRL: PropertiesRepository
+                deactivate PLAT
+
+
+
+
+            deactivate CTRL
+
+
+        deactivate UI
+
+    ADM -> UI : selects the type of property
+    activate UI
+
+        UI --> ADM : shows filters and requests data
+    deactivate UI
+
+    ADM -> UI : Selects requested data (bedrooms, bathrooms,\n type of contract and type of property)
+    activate UI
+
+        UI --> ADM : shows selected category and requested data(rent, buy,\nnumber of rooms,number of bathrooms,\n land, house, apartament)
+    deactivate UI
+
+    ADM -> UI : types data
+    activate UI
+    UI->CTRL: parameters:getPropertiesWithParameters(rent, buy,number of rooms,\nnumber of bathrooms, land, house, apartament, sort by\n price ascending, sort bt price descending , sort by parish)
+    CTRL->TaskCategoryRepository:parameters
+
+    activate TaskCategoryRepository
+
+    opt
+
+TaskCategoryRepository->TaskCategoryRepository:sort(parameters)
+activate TaskCategoryRepository
+deactivate TaskCategoryRepository
+end opt
+opt
+TaskCategoryRepository->TaskCategoryRepository:filter(parameters)
+activate TaskCategoryRepository
+deactivate TaskCategoryRepository
+end opt
+TaskCategoryRepository -->CTRL:properties
+CTRL-->UI:properties
+
+
+
+
+
+            UI --> ADM: displays properties and operation success
+    deactivate UI
+
+deactivate ADM
+
+@enduml

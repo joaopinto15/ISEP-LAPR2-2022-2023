@@ -1,0 +1,176 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+'skinparam linetype orto
+
+'skinparam classAttributeIconSize 0
+'---------File styling---------
+skinparam class {
+    BackgroundColor PeachPuff
+    ArrowColor RoyalBlue
+    BorderColor RoyalBlue
+}
+'left to right direction
+'User interface'
+
+class Land {
+    - double area
+    - double distanceFromCityCentre
+    - ArrayList<String> photoURL
+    - Address address
+    - Deal deal
+    + Land(area, distanceFromCityCentre, photoURL, address, deal)
+}
+
+class Apartment {
+    -int numberOfBedrooms
+    -int numberOfBathrooms
+    -int numberOfParkingSpace
+    -List<String> availableEquipment
+    + Apartment(land, numberOfBedrooms, numberOfBathrooms, numberOfParkingSpace, availableEquipment)
+}
+
+class House {
+    - boolean basement
+    - boolean inhabitableLoft
+    - String sunExposure
+    + House(apartment, basement, inhabitableLoft, sunExposure)
+}
+
+class Address {
+    - String street
+    - String city
+    - String state
+    - int zipcode
+    - String district
+    + setAddress(street, city, state, zipcode)
+    + getAddress()
+}
+
+class Person {
+    - String name
+    - int passportNumber
+    - int taxNumber
+    - int phoneNumber
+    - Email emailAddress
+    - String pwd
+    - String roleId
+    - Address address
+    + Person(name, passportNumber, taxNumber, phoneNumber, emailAddress, pwd, roleId, address)
+}
+
+class Repositories {
+    - Repositories()
+    + getInstance() : Repositories
+    + getAnnouncementRepository()
+}
+
+class Employee {
+    - String name
+    - int passportNumber
+    - int taxNumber
+    - int phoneNumber
+    - Email emailAddress
+    - String pwd
+    - String roleId
+    - Address address
+    - Agency agency
+    + Employee(name, passportNumber, taxNumber, phoneNumber, emailAddress, pwd, roleId, address, agency)
+}
+
+class Agency {
+    - String id
+    - Address address
+    - String designation
+    - String phoneNumber
+    - Email emailAddress
+    + Agency(id, address, designation, phoneNumber, emailAddress)
+}
+
+class Email {
+    - String email
+    + Email(email)
+}
+
+class AnnouncementUI {
+}
+
+class AnnouncementController {
+    + getEmployeeInSession()
+    + getClientList()
+    + publishAnnouncement(Request request, Commission commission)
+    + getAnnouncementList()
+}
+
+class AnnouncementRepository {
+    + saveAnnouncement(announcement)
+    + validateAnnouncement(announcement)
+    + getAnnouncementList()
+}
+
+class Announcement {
+    - Request request
+    - Commission commission
+    - Date date
+    - List<Order> orders
+    + Announcement(request, commission, date)
+}
+
+class Request {
+    - Employee employee
+    - Person person
+    - Property property
+    - boolean isPending
+    + Request(employee, person, property, isPending)
+}
+
+class Deal {
+    - Rent rent
+    - Sale sale
+    + Deal()
+}
+
+class Rent {
+    - double price
+    - int contractDuration
+    + Rent(price)
+}
+
+class Sale {
+    - double price
+    + Sale(price, contractDuration)
+}
+
+'UI
+AnnouncementUI --> AnnouncementController
+
+Repositories --> Repositories : instance
+
+'Controller
+AnnouncementController --> Repositories
+AnnouncementController --> Announcement
+Repositories --> AnnouncementRepository
+
+AnnouncementRepository --> Announcement
+Announcement "1" -- "1" Request
+Request --> Land
+Land *-- Apartment
+Request --> Apartment
+Apartment *-- House
+Request --> House
+Request "1" -- "2" Person
+
+Deal --> Sale
+Deal --> Rent
+
+Land "1" -- "1" Deal
+Land "1" -- "1" Address
+Person "1" -- "1" Address
+Employee "*" -- "1" Agency
+Employee --* Person
+
+Person "1" -- "1" Email
+Agency "1" -- "1" Email
+@enduml

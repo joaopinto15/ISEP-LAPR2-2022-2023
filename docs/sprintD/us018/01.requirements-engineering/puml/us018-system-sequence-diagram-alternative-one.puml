@@ -1,0 +1,42 @@
+@startuml
+skinparam monochrome false
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD)
+
+' File sytling
+
+'alt sytling
+skinparam SequenceGroupHeaderFontColor green
+skinparam SequenceGroupFontColor blue
+skinparam SequenceGroupFontSize 15
+'Middle text styling
+'skinparam sequenceMessageAlign center
+'skinparam sequenceMessageAlign direction
+autonumber
+
+actor "Network Manager" as NM #LightGreen
+participant ":System" as System
+
+@startuml
+
+Agent -> System : ask to choose a regression model
+activate System
+
+System --> Agent : shows the regression model options
+deactivate System
+
+Agent -> System : choose a regression model
+activate System
+
+System --> Agent : shows the results for the chosen model
+deactivate System
+
+Agent --> System : closes the scanner
+activate System
+
+System --> Agent : displays operation success
+deactivate System
+
+@enduml

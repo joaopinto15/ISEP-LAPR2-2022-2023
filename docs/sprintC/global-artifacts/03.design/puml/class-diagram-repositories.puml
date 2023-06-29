@@ -1,0 +1,227 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+'skinparam linetype orto
+
+skinparam classAttributeIconSize 0
+'---------File styling---------
+skinparam class {
+    BackgroundColor PeachPuff
+    ArrowColor RoyalBlue
+    BorderColor RoyalBlue
+}
+'left to right direction
+
+class Repositories{
+    -Repositories()
+    +getInstance() : Repositories
+    +getAgencyRepository()
+    +getPersonRepository()
+    +getAnnouncementRepository()
+    +getAuthenticationRepository()
+    +getEmailRepository()
+    +getRequestRepository()
+}
+class Orders{
+    -ArrayList <Order> orders
+}
+class Order{
+    -Date date
+    -double price
+
+}
+class AgencyRepository{
+    
+}
+class Agency {
+    -String id
+    -String designation
+    -int phoneNumber
+    -String emailAddress
+    - Address address
+}
+class Request{
+    - Property property
+    - Employee employee
+    - Person Person
+    - Date date
+}
+
+abstract class Property{
+    - enum public PropertyType
+    - double areaInM2
+    - double distanceFromCityCenter
+    - ArrayList <String> photoURL
+    - Address address
+    - Deal deal
+    + Property(PropertyType:propertyType)
+}
+abstract class Home{
+    -int numberOfBedrooms
+    -int numberOfBathrooms
+    -int numberOfParkingSpace
+    -ArrayList <String> availableEquipment
+}
+class House{
+    - boolean basement
+    - boolean inhabitableLoft
+    - String sunExposure
+}
+class Appartement{
+    
+}
+class Land{
+
+}
+abstract class Deal {
+    - enum public DealType
+    + Deal(DealType:dealType)
+}
+class Sale {
+    - double propertyPrice
+    + createSale(propertyPrice)
+}
+class Rent{
+    - double propertyRent
+    - int contractDuration
+    + createRent(propertyRent, contractDuration)
+}
+class PersonRepository{
+
+}
+class Employee{
+    -Agency agency
+}
+class AnnouncementRepository{
+
+}
+class Announcement{
+    - Commission commission
+    - Date date
+    - Request request
+}
+class AuthenticationRepository{
+
+}
+class Person{
+    - User user
+    - int passportNumber
+    - int taxNumber
+    - int phoneNumber
+    - Address address
+}
+class Address {
+    - String street
+    - String city
+    - String district
+    - String state
+    - int zipcode
+}
+
+class Commission{
+    - commissionType
+    - commissionValue
+}
+class EmailRepository{
+
+}
+package ExternalLibraries.AuthLib-1.0{
+    class UserStore {
+
+    }
+    class Store {
+        -Stores()
+        -getInstance()
+        -getUserStore()
+        -getUserRoelStore()
+    }
+    class User{
+        -email
+        -password
+        -name
+        -UserRole userRole
+    }
+    class UserRoleStore{
+
+    }
+    class UserRole{
+        -id 
+        -description
+    }
+}
+class Date{
+    - int year
+    - Month month
+    - int day
+}
+class Email{
+    - Employee from
+    - Person to
+    - String subject
+    - String body
+}
+
+
+'ExternalLibraries.AuthLib
+Store --> Store : instance
+Store --> UserStore
+Store --> UserRoleStore
+UserRoleStore ..> UserRole
+UserStore ..> User 
+User --* UserRole
+'Person
+
+User --* Person 
+
+Repositories --> Repositories : instance
+Repositories --> AgencyRepository
+Repositories --> PersonRepository
+Repositories --> AnnouncementRepository
+Repositories --> AuthenticationRepository
+Repositories --> EmailRepository
+Repositories --> RequestRepository
+
+'AgencyRepository
+AgencyRepository ..> Agency
+Agency *-- Address
+Announcement *-- Commission
+Announcement *-- Date
+Request *-- Property
+Request *-- Employee
+Request *-- Person
+Request *-- Date
+Deal <|-- Sale
+Deal <|-- Rent
+Property *-- Deal
+Property <|-- Land
+Property <|-- Home
+Property *-- Address
+Home <|-- House
+Home <|-- Appartement
+'PersonRepository
+PersonRepository ..> Person
+Person --* Person
+
+'EmployeeRepository
+Employee --|> Person
+Employee *-- Agency
+
+'AnnouncementRepository
+AnnouncementRepository ..> Announcement
+Announcement "1" -- "1" Orders
+Orders "1" -- "*" Order
+
+'RequestRepository
+RequestRepository ..> Request
+Order *-- Date
+
+'EmailRepository
+
+EmailRepository ..> Email
+
+
+Person *-- Address
+
+@enduml

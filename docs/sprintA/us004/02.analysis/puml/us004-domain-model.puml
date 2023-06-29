@@ -1,0 +1,82 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+'skinparam linetype ortho
+left to right direction
+'skinparam classAttributeIconSize 0
+hide circle
+hide methods
+'---------File styling---------
+skinparam class {
+    BackgroundColor PeachPuff
+    ArrowColor RoyalBlue
+    BorderColor RoyalBlue
+}
+'------------|Actors|----------------
+class Agent{
+
+}
+class "Property Owner" as PO {
+    - name
+    - citizenCardNumber
+    - taxNumber
+    - address
+    - email
+    - phoneNumber
+    - password
+}
+class Property {
+    - type
+    - area 
+    - location
+    - distanceFromCityCenter
+    - requested price 
+    - photographs
+
+}
+class Home {
+    - numberOfbedrooms
+    - numberOfbathrooms
+    - numberOfParkingSpace
+    - availableEquipment
+}
+class Land{
+
+}
+class Apartment{
+
+}
+class House{
+    - basement
+    - inhabitableLoft
+    - sunExposure
+}
+class Anouncement{
+    - state
+}
+class Sale{
+
+}
+class Lease{
+    -contractDuration
+}
+'-------------------connections------------------
+'Owner
+PO "1" -- "1" Anouncement : request >
+
+'Anouncement
+Anouncement "1" -- "1"  Sale : can be > 
+Anouncement "1" -- "1"  Lease : can be > 
+
+Anouncement "1" -- "1" Property : has >
+Anouncement "1" -- "1" Agent : send to >
+'--------------------heritage--------------------
+.Property <|-- .Land : is a 
+.Property <|-- .Home : is a
+.Home <|-- .Apartment : is a
+.Home <|-- .House : is a
+
+
+
+@enduml

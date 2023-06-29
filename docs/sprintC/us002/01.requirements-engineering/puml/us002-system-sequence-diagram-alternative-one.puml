@@ -1,0 +1,82 @@
+@startuml
+'alt styling
+skinparam SequenceGroupHeaderFontColor green
+skinparam SequenceGroupFontColor blue
+skinparam SequenceGroupFontSize 15
+'Middle text styling
+'skinparam sequenceMessageAlign center
+'skinparam sequenceMessageAlign direction
+autonumber
+
+actor "Agent" as A
+participant ":System" as System
+
+activate A
+
+A -> System : asks to announce a property
+activate System
+
+System --> A : shows the list of clients available and asks to select one
+deactivate System
+
+A -> System : selects a client
+activate System
+
+'if statement
+System --> A : requests the property type (land, apartment, house)
+deactivate System
+
+A -> System : types the requested data
+activate System
+
+System --> A : request the address, area, distance from city centre and photoURL (one or more)
+A -> System : types requested data
+
+System --> A : request deal type (sale, rent)
+A -> System : types requested data
+
+alt sale
+    System --> A : request sale price
+    A -> System : types requested data
+else rent
+    System --> A : request sale price and contract duration
+    A -> System : types requested data
+end
+
+alt apartment or house
+    System --> A : request the number of bedrooms, number of bathrooms, number of parking spaces and available equipment (one or more)
+    A -> System : types requested data
+end
+
+alt house
+    System --> A : request if it has basement, inhabitable loft and how is the sun exposure (high, low, medium)
+    A -> System : types requested data
+end
+
+System --> A : request the commission type (fix amount, percentage)
+A -> System : types requested data
+
+alt fix amount
+    System --> A : request the commission fix amount value
+    A -> System : types requested data
+else percentage
+    System --> A : request the commission percentage value
+    A -> System : types requested data
+end
+
+System --> A : shows the announcement and asks for confirmation
+deactivate System
+
+A -> System : types requested data
+activate System
+
+'Final Part
+
+alt confirms
+    System --> A : Displays operation success
+else
+    System --> A : Displays operation refused
+end
+
+deactivate System
+@enduml

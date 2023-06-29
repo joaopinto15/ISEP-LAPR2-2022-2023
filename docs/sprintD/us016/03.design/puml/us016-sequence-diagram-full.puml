@@ -1,0 +1,106 @@
+@startuml
+skinparam monochrome false
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+'alt sytling
+skinparam SequenceGroupHeaderFontColor green
+skinparam SequenceGroupFontColor blue
+skinparam SequenceGroupFontSize 15
+'Middle text styling
+'skinparam sequenceMessageAlign center
+'skinparam sequenceMessageAlign direction
+autonumber
+
+'hide footbox
+actor "Agent" as Agent #LightBlue
+participant ":RespondVisitRequestUI" as UI
+participant ":RespondVisitRequestController" as CTRL
+participant ":BookingRequestController" as CTRL2
+participant ":Domain" as Domain
+participant "message\n:Message" as Message
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant "visitRepository:\nVisitRepository" as VisitRepository
+
+
+
+
+activate Agent
+
+        Agent -> UI : selects a visit request to respond
+
+        activate UI
+
+            UI -> CTRL** : create
+
+            UI -> CTRL : getVisit()
+            activate CTRL
+
+            CTRL -> CTRL2 : getVisit()
+            activate CTRL2
+
+            CTRL2 --> CTRL : visit
+            deactivate CTRL2
+
+            CTRL --> UI : visit
+
+            deactivate CTRL
+
+            UI --> Agent : shows visit details
+        
+        UI --> Agent : request the message body and \nasks if it is to accept or reject the visit
+        deactivate UI
+        Agent -> UI : types the data
+        activate UI
+        UI --> Agent : asks to confirm the message
+        deactivate UI
+        Agent -> UI : confirms the message
+        activate UI
+        UI -> CTRL : notifyClient(Visit visit, String text, boolean isAccepted)
+        activate CTRL
+        alt isAccepted
+            CTRL -> Domain : checkDomain()
+            activate Domain
+            Domain --> CTRL : true
+            deactivate Domain
+            CTRL -> CTRL :  sendAcceptanceEmail(Visit visit, String text)
+        else not isAccepted
+            CTRL -> Domain : checkDomain()
+            activate Domain
+            Domain --> CTRL : true
+            deactivate Domain
+            CTRL -> CTRL :  sendRejectionEmail(Visit visit, String text)
+        end
+        
+        CTRL -> Message : createMessage(boolean isEmail,String subject, Employee from, Person to, String information)
+        activate Message
+        Message -> Message : send()
+        Message -> Message : save()
+        Message -> CTRL : true
+        deactivate Message
+
+        CTRL -> RepositorySingleton : getInstance()
+        activate RepositorySingleton
+
+        RepositorySingleton --> CTRL: repositories
+        deactivate RepositorySingleton
+
+        CTRL -> PLAT : getVisitRepository()
+        activate PLAT
+
+        PLAT --> CTRL: VisitRepository
+        deactivate PLAT
+
+        CTRL -> VisitRepository : delete(Visit visit)
+        activate VisitRepository
+        VisitRepository --> CTRL : true
+        deactivate VisitRepository 
+        CTRL -> UI : informs the message was sent
+        deactivate CTRL
+        UI --> Agent : informs the messae was sent
+        deactivate UI
+
+
+    
+@enduml

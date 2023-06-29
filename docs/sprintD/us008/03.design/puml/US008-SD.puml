@@ -1,0 +1,102 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+'hide footbox
+actor "Agent" as AGN
+participant ":PropertyAnnouncementsRequestUI" as UI
+participant ":PostAnnouncementController" as CTRL
+participant ":Repositories" as RE
+participant "RequestRepository" as RRE
+participant "AnnouncementRepository" as ARE
+participant "Announcement" as ANN
+activate AGN
+
+AGN -> UI : asks to see the list of property Announcements
+activate UI
+
+UI -> CTRL : create
+activate CTRL
+
+CTRL -> RE : getRequestByDate(getEmployeeInSession()
+activate RE
+
+RE -> RRE : getRequestList
+activate RRE
+
+
+
+RRE --> RE :requestList
+deactivate RRE
+
+RE --> CTRL : requestByDate
+deactivate RE
+
+CTRL -> UI : requestByDate(getEmployeeInSession())
+deactivate CTRL
+
+UI --> AGN : show the Announcements Lists and asks to post one or delete
+deactivate UI
+
+opt : The agent wants to post one of the Announcements
+
+AGN -> UI : selects the Announcement do post
+activate UI
+
+UI -> CTRL : createCommission
+activate CTRL
+
+CTRL -> RE : createCommission
+activate RE
+
+RE -> ARE : createCommission
+activate ARE
+
+ARE -> ANN : submitAnnouncement
+activate ANN
+
+ANN --> ARE : Announcement published
+deactivate ANN
+
+ARE --> RE : Announcement published
+deactivate ARE
+
+RE --> CTRL : Announcement published
+deactivate RE
+
+CTRL --> UI : Announcement published
+deactivate CTRL
+
+UI --> AGN : Informs operation success (Announcement was published)
+deactivate UI
+end
+
+opt : The agent wants to delete one of the Announcements
+
+AGN -> UI : selects the Announcement do delete
+activate UI
+
+UI -> CTRL : deleteRequest()
+activate CTRL
+
+CTRL -> RE : deleteRquest()
+activate RE
+
+RE -> RRE : deleteRequest()
+activate RRE
+
+RRE --> RE : Request Deleted and Email Sent
+deactivate RRE
+
+RE --> CTRL : Request Deleted and Email Sent
+deactivate RE
+
+CTRL --> UI : Request Deleted and Email Sent
+deactivate CTRL
+
+UI --> AGN : Informs operation success (Announcement was Deleted)
+end
+@enduml

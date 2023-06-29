@@ -1,0 +1,76 @@
+@startuml
+'alt styling
+skinparam SequenceGroupHeaderFontColor green
+skinparam SequenceGroupFontColor blue
+skinparam SequenceGroupFontSize 15
+'Middle text styling
+'skinparam sequenceMessageAlign center
+'skinparam sequenceMessageAlign direction
+autonumber
+
+actor "Agent" as A
+
+participant ":System" as System
+
+activate A
+
+        A -> System : asks to announce a property
+    activate System
+
+    System --> A : shows the list of users available and asks to select one
+    deactivate System
+
+    A -> System : selects a user
+    activate System
+
+        'if statement
+        System --> A : requests the property type (house,apartment,land)
+    deactivate System
+
+    A -> System : types the requested data
+    activate System
+
+        alt land
+
+            autonumber 5
+
+            System-->A : request the land characteristics
+            A -> System : types requested data
+        else apartment
+
+            autonumber 5
+            System-->A : request the apartment characteristics
+            A -> System : types requested data
+
+        else house
+
+            autonumber 5
+
+            System-->A : request the house characteristics
+            A -> System : types requested data
+        end
+
+        System -> A : requests the business type (sell or rent)
+    deactivate System
+
+    A -> System : types the requested data
+    activate System
+
+        alt rent
+
+            System-->A : request the contract duration
+            A -> System : types requested data
+        end
+
+        System-->A : request the commission
+        A -> System : types requested data
+        System --> A : shows the data and ask confirmation
+    deactivate System
+
+    A -> System : confirms the data
+    activate System
+
+        'Final Part
+        System --> A : Displays operation success
+    deactivate System
+@enduml

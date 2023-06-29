@@ -1,0 +1,76 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+'skinparam linetype orto
+
+skinparam classAttributeIconSize 0
+'---------File styling---------
+skinparam class {
+    BackgroundColor PeachPuff
+    ArrowColor RoyalBlue
+    BorderColor RoyalBlue
+}
+'left to right direction
+'User interface'
+
+class Repositories{
+    -Repositories()
+    +getInstance() : Repositories
+    +getTransactionRepository()
+}
+class ImportBusinessDataUI{
+    
+}
+class ImportBusinessDataController{
+    +checkFileFormat()
+    +checkFileContent()
+}
+class TransactionRepository{
+    - TransactionList : List<Transaction>
+    + saveTransaction(Transaction transaction)
+}
+class Transaction{
+    - int id
+    - Person owner
+    - Announcement announcement
+    - Order order
+    +readTransaction(File file)
+
+}
+class TransactionMapper{
+    + List <TransactionDTO> toDTO(List<Transaction> list)
+    + TransactionDTO toDTO(Transaction transaction)
+}
+class TransactionDTO{
+    - int id
+    - PersonDTO owner
+    - AnnouncementDTO announcement
+    - OrderDTO order
+} 
+
+
+'User Interface
+ImportBusinessDataUI --> ImportBusinessDataController
+
+'Controller
+ImportBusinessDataController --> Repositories
+ImportBusinessDataController ..> TransactionRepository
+ImportBusinessDataController ..> TransactionMapper
+ImportBusinessDataController ..> TransactionDTO
+ImportBusinessDataController ..> Transaction
+
+'Repositories
+Repositories --> Repositories : instance
+Repositories --> TransactionRepository
+
+'Mapper 
+TransactionMapper ..> TransactionDTO
+
+'Order
+TransactionRepository ..> Transaction
+
+
+
+@enduml

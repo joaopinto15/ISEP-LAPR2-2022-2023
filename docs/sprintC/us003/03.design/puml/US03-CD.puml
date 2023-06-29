@@ -1,0 +1,125 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+'skinparam linetype orto
+
+skinparam classAttributeIconSize 0
+
+'left to right direction
+
+
+class Employee {
+    -EmployeeRole role
+    - Address address
+    - Agency agency
+    + Employee(role, address)
+}
+
+class Person {
+-String name
+-String citizenCardNumber
+-String taxNumber
+-String emailAddress
+-String phoneNumber
++ Person(name, citizenCardNumber, taxNumber, emailAddress, phoneNumber)
+}
+
+class EmployeeRole {
+- String id
+- String designation
+}
+
+class Agency {
+    - String id
+    - Address address
+    - String designation
+    - String phoneNumber
+    - String emailAddress
+    - ArrayList<Employee> employees
+    + Agency(id, designation,\nphoneNumber, emailAddress)
+}
+
+class Address {
+- String street
+- String city
+- String district
+- String state
+- String zipcode
+
++ Address(street, city, district, state, zipcode)
+}
+
+
+
+class AgencyRepository {
+    + getAgencyList()
+    + addAgency()
+    + validateAgency()
+    + createAgency()
+}
+
+
+
+class Repositories {
+    - Repositories()
+    + getInstance() : Repositories
+    + getEmployeeRepository()
+    + getAgencyRepository()
+    + getRolesRepository()
+}
+
+
+class RegisterEmployeeController {
+    +registerEmployeeController()
+    +registerEmployee(name, citizenCardNumber,\n taxNumber, emailAddress, phoneNumber, role, address, agency)
+    +getAgencyList()
+    +getRoleList()
+    +getRepositories()
+    +saveEmployee()
+    +setRole()
+}
+
+class RolesRepository {
+    + getRolesList()
+    + addRole(role)
+    + validateRole(role)
+    + createRole()
+}
+
+class EmployeeRepository {
+    + getEmployeeList()
+    + addEmployee(employee)
+    + validateEmployee(employee)
+    + saveEmployee(employee)
+    + registerEmployee(name, citizenCardNumber,\n taxNumber, emailAddress, phoneNumber, role, address, agency)
+}
+
+
+
+class RegisterEmployeeUI {
+}
+
+
+
+Repositories -> Repositories : instance
+
+RegisterEmployeeUI .> RegisterEmployeeController
+RolesRepository --> "*" EmployeeRole
+RegisterEmployeeController .> Repositories : repositories
+Repositories -> "1" EmployeeRepository
+Repositories --> "1" AgencyRepository
+Repositories --> "1" RolesRepository
+RegisterEmployeeController ..> AgencyRepository : AgencyRepository
+RegisterEmployeeController ..> EmployeeRepository : EmployeeRepository
+AgencyRepository --> "*" Agency
+EmployeeRepository --> "*" Employee
+RegisterEmployeeController ..> "1" Person
+Employee "1" - "1" EmployeeRole : has >
+Person "1" - "1..*" Address : lives in >
+Employee "1" -up "1" Agency : works in >
+
+Person <|-down- Employee
+
+@enduml

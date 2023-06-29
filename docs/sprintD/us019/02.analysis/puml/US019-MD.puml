@@ -1,0 +1,60 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+'skinparam linetype ortho
+left to right direction
+'skinparam classAttributeIconSize 0
+hide circle
+hide methods
+'---------File styling---------
+skinparam class {
+    BackgroundColor PeachPuff
+    ArrowColor RoyalBlue
+    BorderColor RoyalBlue
+}
+'------------|Actors|----------------
+'|Persons|
+
+
+Class Agent {
+}
+
+class Announcement{
+    - id
+    - state
+    - date
+}
+
+class Agency{
+    - id
+    - designation
+    - phoneNumber
+    - email
+}
+
+class Address{
+    -street
+    -city
+    -state
+    -zipcode
+}
+
+class "Network Manager" as NM{
+
+}
+
+'Announcement
+Announcement "1" -- "1" Agent : send to >
+
+'Agency
+Agency "1" -- "1..*" Agent : has >
+Agency "1" -- "1" Address : has >
+
+'Agent
+Agent "1" -- "*" Announcement : publishes >
+
+'Network Manager
+NM "1" -- "1..*" Agency : manage >
+
+@enduml

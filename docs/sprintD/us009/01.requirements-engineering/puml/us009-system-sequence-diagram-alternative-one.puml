@@ -1,0 +1,40 @@
+@startuml
+skinparam monochrome false
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD)
+
+' File sytling 
+
+'alt sytling
+skinparam SequenceGroupHeaderFontColor green
+skinparam SequenceGroupFontColor blue
+skinparam SequenceGroupFontSize 15
+'Middle text styling
+'skinparam sequenceMessageAlign center
+'skinparam sequenceMessageAlign direction
+autonumber
+
+actor "Client" as CL #LightGrey
+participant ":System" as System
+
+    CL -> System : Ask to leave a message to scheudle a visit
+    activate System
+
+    System -> CL : requests the message
+    deactivate System
+
+    CL -> System : types the data(property,date,starVisit,endVisit)
+    activate System
+
+    System -> CL : shows the request and requests cofirmation
+    deactivate System
+
+    CL -> System : confirms the request
+    activate System
+
+    System -> CL : informs operation sucess
+
+
+@enduml

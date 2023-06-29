@@ -1,0 +1,92 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+'skinparam linetype ortho
+'left to right direction
+'skinparam classAttributeIconSize 0
+hide circle
+hide methods
+'---------File styling---------
+skinparam class {
+    BackgroundColor PeachPuff
+    ArrowColor RoyalBlue
+    BorderColor RoyalBlue
+}
+
+
+class Property{
+    - type
+    - area
+    - location
+    - distanceFromCityCenter
+    - price
+    - photographs
+
+}
+class Visit{
+
+}
+
+class Land{
+
+}
+class Apartment{
+
+}
+class House{
+    - basement
+    - inhabitableLoft
+    - sunExposure
+}
+class Anouncement{
+
+}
+
+class Home {
+    - numberOfbedrooms
+    - numberOfbathrooms
+    - numberOfParkingSpace
+    - availableEquipment
+}
+
+
+class Prediction {
+    -value
+}
+
+class Request {
+
+}
+
+class Lease{
+    -contractDuration
+}
+class Sale{
+
+}
+'-------------------connections------------------
+'Anouncement
+Anouncement "1" -- "1" Property : has >
+
+'Client
+Client "1" -- "1" Visit : schedule >
+Client "1" -- "*" Anouncement : see >
+Client "1" -- "1..*" Request : makes >
+
+'Property
+Property "1" -- "*" Visit : has >
+
+'Visit
+Visit "1" -- "1" Prediction : has >
+
+'Anouncement
+Anouncement "1" -- "1" Sale : can be >
+Anouncement "1" -- "1" Lease : can be >
+'--------------------heritage--------------------
+.Property <|-- .Land : is a
+.Property <|-- .Home : is a
+.Home <|-- .Apartment : is a
+.Home <|-- .House : is a
+
+@endumlduml

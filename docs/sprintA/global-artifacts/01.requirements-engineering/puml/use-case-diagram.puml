@@ -1,0 +1,29 @@
+@startuml
+
+left to right direction
+actor "System Administrator" as SA  #pink;line:red;line.bold;text:red
+actor "Real State Agent" as RSA     #SkyBlue;line:blue;line.bold;text:blue
+actor Owner as O                    #RosyBrown;line:Brown;line.bold;text:brown
+actor Client as C                   #LightGreen;line:Green;line.bold;text:Green
+actor "Unregistered User" as UU     #LightGrey;line:Grey;line.bold;text:Grey    
+actor "Store manager" as SM         #LightSalmon;line:Salmon;line.bold;text:Salmon        
+actor "Network manager" as NM       #DimGrey;line:Black;line.bold;text:Black
+
+
+
+rectangle System {
+    usecase " UC 1 - Display listed properties" as UC1
+    usecase " UC 2 - Publish any sale announcement on the system" as UC2
+    usecase " UC 3 - Register a new Employee" as UC3
+    usecase " UC 4 - Submit a request for listing a proerty sale or rent, choosing the resposible agent" as UC4
+    usecase " UC 5 - Register a store" as UC5
+    usecase " UC 6 - Specify districts, municipalities and parish in the system" as UC6
+}
+UU  --> UC1
+RSA --> UC2
+SA  --> UC3
+O   --> UC4
+SA  --> UC5
+SA  --> UC6
+
+@enduml

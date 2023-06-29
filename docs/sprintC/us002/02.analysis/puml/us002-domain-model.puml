@@ -1,0 +1,103 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+'skinparam linetype ortho
+left to right direction
+'skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+'---------File styling-----------
+skinparam class {
+    BackgroundColor PeachPuff
+    ArrowColor RoyalBlue
+    BorderColor RoyalBlue
+}
+
+'------------Actors----------------'
+
+class Commission {
+    - commissionType
+}
+
+class fixAmount {
+    - value
+}
+
+class percentage {
+    - value
+}
+
+class Announcement {
+    - state
+    - price
+}
+
+class Property {
+    - type
+    - area
+    - location
+    - distanceFromCityCenter
+    - photographs
+}
+
+class Rent {
+    - rentPrice
+    - contractDuration
+}
+
+class Sale {
+    - salePrice
+}
+
+class Deal {
+    - dealType
+}
+
+class Address {
+    - street
+    - city
+    - state
+    - zipcode
+}
+
+class Home {
+    - numberOfbedrooms
+    - numberOfbathrooms
+    - numberOfParkingSpace
+    - availableEquipment
+}
+
+class Land {
+
+}
+
+class House {
+    - basement
+    - inhabitableLoft
+    - sunExposure
+}
+
+'-------------------connections------------------'
+
+Announcement -- Commission : has <
+Commission -- fixAmount : has <
+Commission -- percentage : has <
+Deal -- Property : has <
+Deal -- Sale : is a <
+Deal -- Rent : is a >
+Agent -- Commission : set >
+Agent -- Announcement : publishes >
+Announcement -- Property : has >
+Announcement -- Agent : send to >
+Client -- Announcement : has <
+Property -- Address : has >
+
+'--------------------heritage--------------------'
+Property <|-- Land : is a
+Property <|-- Home : is a
+Home <|-- Apartment : is a
+Home <|-- House : is a
+
+@enduml

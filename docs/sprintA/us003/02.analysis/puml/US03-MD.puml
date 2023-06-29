@@ -1,0 +1,52 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+'left to right direction
+
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+title US03
+
+
+
+class "System Administrator" as SA {
+
+}
+
+class Employee {
+   agencyDesignation
+    role
+}
+
+class User {
+    - name
+    - citizenCardNumber
+    - taxNumber
+    - address
+    - email
+    - phoneNumber
+    -password
+}
+
+class "Network Manager" as NM {
+}
+
+class Agent {
+}
+
+class "Store Manager" as SM {
+}
+
+
+.SA "      1" -- "1..*" .Employee : register >
+.User <|-- .Employee : is a
+.Employee "         1" -- "  1..*" .SA : can be >
+.Employee "1" -- "1..*" .Agent : can be >
+.Employee "1"-- "1..*" .SM : can be >
+.Employee "1" -- "1..*" .NM : can be >
+@enduml

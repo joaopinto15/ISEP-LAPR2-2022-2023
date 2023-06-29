@@ -1,0 +1,355 @@
+@startuml
+skinparam monochrome false
+skinparam packageStyle rectangle
+skinparam shadowing false
+autonumber
+'alt style
+skinparam SequenceGroupHeaderFontColor green
+skinparam SequenceGroupFontColor blue
+skinparam SequenceGroupFontSize 15
+'hide footbox
+actor "Property Owner" as PO #RosyBrown
+participant ":RegisterPropertyUI" as UI
+participant ":RegisterPropertyController" as CTRL
+'Repositories
+participant ":Repositories" as Repositories
+participant "repositories\n:Repositories" as PLAT
+participant ":UserRepository" as UserRepository
+participant ":AgencyRepository" as AgencyRepository
+participant ":RequestRepository" as RequestRepository
+participant ":EmployeeRepository" as EmployeeRepository
+'Objects
+participant "agent\n:Agent" as Agent
+participant "appartement\n:Appartement" as Appartement
+participant "house\n:House" as House
+participant "land\n:Land" as Land
+participant "sale\n:Sale" as Sale
+participant "rent\n:Rent" as Rent
+participant "request\n:Request" as Request
+activate PO
+
+        PO -> UI : asks to submits a request for listing a property sale/rent
+
+        activate UI
+
+'            UI --> PO : requests data (reference, description,  informal \n description, technical description, duration, cost)
+            'create CTRL
+            UI -> CTRL** : create
+            activate CTRL
+
+            CTRL -> Repositories : getInstance()
+            activate Repositories
+                Repositories --> CTRL: repositories
+            deactivate Repositories
+
+            CTRL -> PLAT: getUserRepository()
+            activate PLAT
+
+            PLAT --> CTRL: userRepository
+            deactivate PLAT 
+
+            UI -> CTRL: getUser(id)
+
+            CTRL -> UserRepository: getUser(id)
+            activate UserRepository
+
+            UserRepository --> CTRL: user
+            deactivate UserRepository
+
+            CTRL -> Repositories : getInstance()
+            activate Repositories
+                Repositories --> CTRL: repositories
+            deactivate Repositories
+
+            CTRL -> PLAT: getAgencyRepository()
+            activate PLAT
+
+            PLAT --> CTRL: agencyRepository
+            deactivate PLAT
+
+
+            UI -> CTRL: getAgencyList()
+
+            CTRL -> AgencyRepository: getAgencyList()
+            activate AgencyRepository
+
+
+
+            AgencyRepository --> CTRL: agencyList
+            deactivate AgencyRepository
+
+            CTRL --> UI : agencyList
+            deactivate CTRL
+
+            UI --> PO : requests to select an agency
+            deactivate UI
+
+            PO -> UI : chooses agency
+            activate UI
+
+            UI -> CTRL : getAgentList(selectedAgency)
+            activate CTRL
+                        CTRL -> Repositories : getInstance()
+                            activate Repositories
+                                Repositories --> CTRL: repositories
+                            deactivate Repositories
+
+                            CTRL -> PLAT: getEmployeeRepository()
+                            activate PLAT
+
+                            PLAT --> CTRL: EmployeeRepository
+                            deactivate PLAT
+            CTRL ->  EmployeeRepository: getAgentList(selectedAgency)
+            activate EmployeeRepository
+
+            participant "agentList: List <Agent>" as agentList
+
+
+            EmployeeRepository-> agentList : create list
+
+            loop for each employee
+
+            EmployeeRepository-> Agent : has(agent) && has(selectedAgency)
+
+            Agent --> EmployeeRepository: boolean(true/false)
+
+            alt Boolean equals True
+
+            EmployeeRepository-> agentList : addAgentToList(employee)
+
+            end
+
+            end
+
+
+
+
+
+            EmployeeRepository--> CTRL : agentList
+            deactivate EmployeeRepository
+
+            CTRL --> UI : agentList
+            deactivate CTRL
+
+    UI --> PO : requests to select an available agent
+                deactivate UI
+        alt Choose an agent
+           PO -> UI : chooses agent
+                    activate UI
+        else Randomly Choose an agent
+            PO -> UI : randomly selected one agent
+        UI -> CTRL : randomAgent()
+        CTRL -> CTRL : randomAgent()
+        end
+      
+        UI --> PO : requests property adress (street,city,district,state,zipcode)
+        deactivate UI
+
+        PO -> UI : types respective data
+        activate UI
+
+       loop selecting one or more photos
+
+        UI --> PO : requests photos (i.e URI)
+        deactivate UI
+
+        PO -> UI : types respective data
+        activate UI
+
+        UI -> CTRL : createPhotoList(URI)
+        activate CTRL
+
+
+        CTRL -> Land : createPhotoList(URI)
+        activate Land
+        deactivate CTRL
+
+        Land -> Land : validatePhoto(URI)
+
+        Land -> Land : addPhoto(URI)
+
+        end
+
+        deactivate Land
+
+        UI --> PO : requests type of property
+        deactivate UI
+
+    alt Property type is a land
+        PO -> UI : types respective data
+        activate UI
+
+        UI -->PO  : requests the Land characteristics
+        deactivate UI
+        PO ->UI  : types respective data
+        activate UI
+
+
+    else Property is an appartement
+    autonumber 45
+        PO -> UI : types respective data
+
+        UI -->PO  : requests the  appartement characteristics
+        deactivate UI
+        PO ->UI  : types respective data
+        activate UI
+
+
+        UI -> CTRL : createAppartement()
+        activate CTRL
+
+         CTRL -> Appartement  : createAppartement()
+        activate Appartement
+        deactivate CTRL
+
+        Appartement -> Appartement : createAppartement()
+        deactivate Appartement
+
+
+
+
+        loop selects one or more equipment
+
+        UI --> PO : request available equipment
+        deactivate UI
+
+        PO -> UI : types respective data
+        activate UI
+
+        end
+
+    else Property is a house
+    autonumber 45
+
+  PO -> UI : types respective data
+
+
+         UI -->PO  : requests the House characteristics
+        deactivate UI
+        PO ->UI  : types respective data
+        activate UI
+
+
+        UI -> CTRL : createHouse()
+        activate CTRL
+
+        CTRL -> House  : createHouse()
+        deactivate CTRL
+        activate House
+        House -> House : createHouse()
+        deactivate House
+
+
+
+        loop selects one or more equipment
+
+            UI --> PO : request available equipment
+            deactivate UI
+
+            PO -> UI : types respective data
+            activate UI
+
+        end
+
+
+
+    end
+
+    UI --> PO : requests deal
+    deactivate UI
+
+    alt Deal is Sale
+
+    PO -> UI : types respective data
+    activate UI
+
+    UI --> PO : requests price
+    deactivate UI
+
+    PO -> UI : types respective data
+    activate UI
+
+
+    UI -> CTRL : createSale(price)
+    activate CTRL
+
+    CTRL -> Sale : createSale(price)
+    activate Sale
+
+    Sale -> Sale : validateSale(price)
+
+    Sale -> Sale : addSale(price)
+    deactivate Sale
+    else Deal is Rent
+    autonumber 59
+    PO -> UI : types respective data
+
+    UI --> PO : requests rent and contract duration
+    deactivate UI
+
+    PO -> UI : types respective data
+    activate UI
+
+    UI -> CTRL : createRent(rent,contractDuration)
+
+    CTRL -> Rent : createRent(rent, contractDuration)
+    activate Rent
+
+    Rent -> Rent : validateRent(rent, contractDuration)
+
+    Rent -> Rent : addRent(rent,contractDuration)
+    deactivate Rent
+    end
+
+    UI -> CTRL : createRequest()
+
+    CTRL -> Request : createRequest()
+    activate Request
+
+    Request -> Request : validateRequest(request)
+
+    Request -> Request : addRequest(request)
+
+    Request --> CTRL : request
+    deactivate Request
+
+    CTRL -> Repositories : getInstance()
+    activate Repositories
+
+    Repositories --> CTRL : repositories
+    deactivate Repositories
+
+    CTRL -> Repositories : getRequestRepository()
+    activate Repositories
+
+    Repositories -> RequestRepository : getRequestRepository()
+    activate RequestRepository
+
+    RequestRepository --> Repositories: RequestRepository
+    deactivate RequestRepository
+
+    Repositories --> CTRL : RequestRepository
+    deactivate Repositories
+
+    CTRL -> RequestRepository : addRequest(request)
+    activate RequestRepository
+    deactivate RequestRepository
+
+
+    CTRL --> UI : request
+    deactivate CTRL
+
+    UI --> PO : shows request and asks to confirm
+    deactivate UI
+
+    PO -> UI : confirms
+    activate UI
+
+    UI --> PO : Display operation sucess
+    deactivate UI
+
+    deactivate PO
+
+
+
+@enduml

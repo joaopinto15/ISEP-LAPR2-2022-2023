@@ -1,0 +1,71 @@
+@startuml
+skinparam monochrome false
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD) - Alternative One
+
+' File sytling 
+
+'alt sytling
+skinparam SequenceGroupHeaderFontColor green
+skinparam SequenceGroupFontColor blue
+skinparam SequenceGroupFontSize 15
+'Middle text styling
+'skinparam sequenceMessageAlign center
+'skinparam sequenceMessageAlign direction
+autonumber
+
+actor "Unregister User" as UU #LightGrey
+participant ":System" as System
+
+    activate UU
+
+    UU -> System : asks to create an account
+    activate System
+
+        System --> UU : requests data (name, passport card number, tax number,\naddress ((asks to select a state) (not mandatory)), email address and phone number)\nand shows list of states
+    deactivate System
+
+    alt enters Address
+
+    UU -> System : types all data and selects state
+    activate System
+
+        System --> UU : shows list of districts available for that state and asks to select one
+    deactivate System
+
+    UU -> System : selects district
+    activate System
+
+        System --> UU : shows list of cities available for that district and asks to select one
+    deactivate System
+
+    UU -> System : selects city
+    activate System
+
+        System --> UU : asks data
+    deactivate System
+
+    UU -> System : types necessary data (street and zip code)
+    activate System
+
+    else does not enter Address
+
+    UU -> System : types requested data except the address
+
+    end
+
+        System --> UU : shows inserted data and asks for confirmation
+    deactivate System
+
+    UU -> System : confirms data
+    activate System
+
+        System --> UU : displays operation success
+    deactivate System
+
+@enduml
+
+
+@enduml

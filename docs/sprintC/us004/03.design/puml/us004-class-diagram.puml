@@ -1,0 +1,201 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+'skinparam linetype orto
+
+'skinparam classAttributeIconSize 0
+'---------File styling---------
+skinparam class {
+    BackgroundColor PeachPuff
+    ArrowColor RoyalBlue
+    BorderColor RoyalBlue
+}
+'left to right direction
+'User interface'
+
+class ListingRequestUI {
+    + displaySuccessMessage()
+    + createDeal()
+    + Land()
+    + House()
+    + Apartement()
+}
+class ListingRequestController {
+    + displayEmployeeList(agents: List<Employee>)
+    + submitProperty(deal, property, person, employee) 
+    + randomAgent(List<Employee> employees, Agency agency) 
+}
+abstract class Property {
+    -double areaInM2
+    -double distanceFromCityCentre
+    -ArrayList <String> photoURL
+    -String typeProperty
+    -Address Address
+    +Property(areaInM2, distanceFromCityCentre, photoURL, typeProperty,
+Address, Housing, Deal)
+}
+abstract class Home{
+    -int numberOfBedrooms
+    -int numberOfBathrooms
+    -int numberOfParkingSpace
+    -ArrayList <String> availableEquipment
+}
+class House{
+    - boolean basement
+    - boolean inhabitableLoft
+    - String sunExposure
+}
+class Apartement{
+    
+}
+class Land{
+
+}
+class Address {
+    - String street 
+    - String city
+    - String state
+    - int zipcode
+    - String distric
+    + setAdress(String street, String city, String state, int zipcode)
+    + getAdress(String street, String city, String state, int zipcode) 
+}
+
+class Repositories {
+    - Repositories()
+    + getInstance() : Repositories
+    + getPersonRepository()
+    + getAnnouncementRepository()
+    + getAgencyRepository()
+}
+class PersonRepository{
+
+}
+
+class AnnouncementRepository{
+    + addRequest()
+    + validateRequest()
+}
+class Employee{
+    - Agency agency
+    - Person person 
+}
+
+class Request {
+    - Person person
+    - Employee Employee
+    - Property property
+    - Deal deal
+    + Request(Employee, property, deal, user)
+}
+abstract class Deal {
+    - enum public DealType
+    + Deal(DealType:dealType)
+}
+class Sale {
+    - double propertyPrice
+    + createSale(propertyPrice)
+}
+class Rent{
+    - double propertyRent
+    - int contractDuration
+    + createRent(propertyRent, contractDuration)
+}
+class Agency{
+    - int id 
+    - String designation
+    - int phoneNumber
+    - String email
+    - Address address
+}
+class AgencyRepository{
+
+}
+class Person{
+    - String name
+    - int passportNumber
+    - int taxNumber
+    - String email
+    - int phoneNumber
+    - String password
+    - Address address
+}
+package ExternalLibraries.AuthLib-1.0{
+    class UserStore {
+
+    }
+    class Store {
+        -Stores()
+        -getInstance()
+        -getUserStore()
+        -getUserRoelStore()
+    }
+    class User{
+        -email
+        -password
+        -name
+        -UserRole userRole
+    }
+    class UserRoleStore{
+
+    }
+    class UserRole{
+        -id 
+        -description
+    }
+}
+'ExternalLibraries.AuthLib
+Store --> Store : instance
+Store --> UserStore
+Store --> UserRoleStore
+UserRoleStore ..> UserRole
+UserStore ..> User 
+User --* UserRole
+'UI
+ListingRequestUI ..> ListingRequestController
+
+'Controller
+ListingRequestController ..> Repositories : repositories
+ListingRequestController ..> Request
+'Repositories
+Repositories --> Repositories : instance
+Repositories --> PersonRepository
+Repositories --> AnnouncementRepository
+Repositories --> AgencyRepository
+
+
+'Agency
+AgencyRepository ..> Agency
+Agency *-- Address
+'Request 
+AnnouncementRepository ..> Request
+Request *-- Employee
+Request *-- Property
+Request *-- Deal
+Request *-- Person
+
+PersonRepository ..> Employee
+PersonRepository ..> Person
+'Property 
+AnnouncementRepository ..> Property
+Property *-- Address
+Property <|-- Home
+Home <|-- House
+Property <|-- Land
+Home <|-- Apartement
+
+'Person
+
+Person *-- User
+Person *-- Employee
+Person *-- Address
+
+'Employee
+Employee *-- Agency
+
+'Deal
+Deal <|-- Sale
+Deal <|-- Rent
+@enduml

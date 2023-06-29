@@ -1,0 +1,79 @@
+-------------------
+|  Employees  |
+-------------------
+
+-> email
+john.doe@example.com
+
+-> password
+ss
+--------------
+|  Clients   |
+--------------
+-> email
+client@this.app
+jane.smith@example.com
+
+-> password
+cl
+ss
+--------------
+|  Admins  |
+--------------
+
+-> email
+joao@example.com
+sandro@example.com
+
+-> password
+ss
+
+-----------------------------
+|  Network Manager  |
+-----------------------------
+
+-> email
+networkManager@this.app
+networkManager2@this.app
+
+-> password
+nm
+nm
+-----------------
+|  Manager  |
+-----------------
+
+-> email
+manager@this.app
+manager2@this.app
+
+-> password
+m
+m
+--------------
+|  run Jar  |
+--------------
+mvn clean package
+java -jar target/project-template-1.0-SNAPSHOT-jar-with-dependencies.jar
+
+------------
+|   .csv   |
+------------
+legacyRealStateUSAMoodle_MATCP_MDISC .csv
+legacyRealStateUSAMoodle.csv
+
+
+URI Links
+https://example.com/apartment2/photo1.jpg
+https://example.com/apartment2/photo1.jpg
+https://example.com/apartment2/photo1.jpg
+
+Street 
+
+Rua Funde de Vila 
+
+zipcode 
+44501
+
+
+

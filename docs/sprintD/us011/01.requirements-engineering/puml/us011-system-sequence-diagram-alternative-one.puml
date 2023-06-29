@@ -1,0 +1,31 @@
+@startuml
+'alt styling
+skinparam SequenceGroupHeaderFontColor green
+skinparam SequenceGroupFontColor blue
+skinparam SequenceGroupFontSize 15
+'Middle text styling
+'skinparam sequenceMessageAlign center
+'skinparam sequenceMessageAlign direction
+autonumber
+
+Agent -> System : ask to check orders from a property
+activate System
+
+System --> Agent : shows the announcements
+deactivate System
+
+Agent -> System : chose an announcement to accept
+activate System
+
+System --> Agent : shows the orders
+deactivate System
+
+Agent -> System : chose an order to accept
+activate System
+
+System --> Agent : Displays operation success
+deactivate System
+
+Agent --> System : Displays operation success
+
+@enduml

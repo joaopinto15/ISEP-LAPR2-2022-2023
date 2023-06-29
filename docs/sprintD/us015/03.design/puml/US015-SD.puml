@@ -1,0 +1,103 @@
+@startuml
+skinparam monochrome false
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+'hide footbox
+actor "Agent" as AGT #red
+participant "BookingRequestsUI" as UI
+participant "BookingRequestsController" as CTRL
+participant "Repositories" as REP
+participant "PersonRepository" as PREP
+participant "AuthenticationRepository" as AREP
+participant "VisitRepository" as VREP
+participant "VisitMapper" as VMAP
+participant "Visit" as V
+
+
+
+activate AGT
+
+AGT -> UI : asks to see the list of booking requests managed by him
+activate UI
+
+UI --> AGT : requests the data period (start date and end date)
+deactivate UI
+
+AGT-> UI : types requested data
+activate UI
+
+UI -> CTRL : getCurrentPerson()
+activate CTRL
+
+
+
+CTRL -> REP : getPersonRepository()
+activate REP
+CTRL -> REP : getAuthenticationRepository()
+
+REP -> PREP : getPersonByID()
+activate PREP
+
+PREP -->REP : person
+deactivate PREP
+
+REP -> AREP :getCurrentUserSession().getUserId()
+activate AREP
+
+AREP --> REP : userID
+deactivate AREP
+
+REP --> CTRL : person by ID
+deactivate REP
+
+CTRL -> REP : getVisitRepository()
+activate REP
+
+REP -> VREP : getVisitsByAgentList(employee)
+activate VREP
+
+VREP -> VREP: getAgentByVisit(visit)
+
+VREP --> REP : visits by agent List
+deactivate VREP
+
+REP --> CTRL : Visits By Agent List
+deactivate REP
+
+CTRL --> UI : getVisitsByDate(getCurrentPerson())
+deactivate CTRL
+
+UI--> AGT : shows the booking requests list
+deactivate UI
+
+AGT -> UI : selects the sorting algorithm
+activate UI
+
+UI-> CTRL : selectedSortType
+activate CTRL
+opt
+CTRL -> CTRL : bubbleSort(Visits)
+CTRL -> CTRL : visits
+end
+opt
+CTRL -> CTRL : bubbleSortDescending(Visit)
+CTRL -> CTRL : visits
+end
+CTRL -> VMAP : toDto(visits)
+activate VMAP
+
+VMAP -> VMAP :visitsDTO: List<VisitDTO> = toDto(visits)
+VMAP --> CTRL : visitsDTO
+deactivate VMAP
+
+CTRL--> UI : getObservableList
+deactivate CTRL
+
+UI --> AGT: show all booking requests with the sorted method
+deactivate UI
+deactivate AGT
+
+@enduml

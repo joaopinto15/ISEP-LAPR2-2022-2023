@@ -1,0 +1,90 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+'skinparam linetype ortho
+'left to right direction
+'skinparam classAttributeIconSize 0
+hide circle
+hide methods
+'---------File styling---------
+skinparam class {
+    BackgroundColor PeachPuff
+    ArrowColor RoyalBlue
+    BorderColor RoyalBlue
+}
+
+class Property{
+    - type
+    - area
+    - distanceFromCityCenter
+    - photoURL
+
+}
+class Home {
+    - numberOfbedrooms
+    - numberOfbathrooms
+    - numberOfParkingSpace
+    - availableEquipment
+}
+class Land{
+
+}
+
+class Apartment{
+
+}
+class House{
+    - basement
+    - inhabitableLoft
+    - sunExposure
+}
+class Announcement{
+    - state
+}
+
+class Visit{
+-data
+}
+
+class Address{
+    -street
+    -city
+    -state
+    -zipcode
+}
+
+class Deal{
+    - dealType
+}
+class Sale{
+    - propertyPrice
+}
+class Rent{
+    - propertyRent
+    - contractDuration
+}
+class Agent{
+}
+'-------------------connections------------------
+'Announcement
+Announcement "1" -- "1" Property : has >
+'Client
+Client "1" -- "*" Visit : schedule >
+Client "1" -- "*" Announcement : see >
+'Property
+Announcement "*" -- "*" Visit : has >
+Property "1" -- "1" Address : has >
+Property "1" -- "1" Deal : has >
+'Deal
+Deal *-- Sale
+Deal *-- Rent
+'--------------------heritage--------------------
+.Property <|-- .Land : is a
+.Property <|-- .Home : is a
+.Home <|-- .Apartment : is a
+.Home <|-- .House : is a
+'---------------------Agent-------------------------
+Announcement "1" -- "1" Agent: has >
+Agent "1" -- "*" Visit : confirm >
+@enduml

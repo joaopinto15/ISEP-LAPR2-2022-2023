@@ -1,0 +1,45 @@
+@startuml
+skinparam monochrome false
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD)
+
+' File sytling
+
+'alt sytling
+skinparam SequenceGroupHeaderFontColor green
+skinparam SequenceGroupFontColor blue
+skinparam SequenceGroupFontSize 15
+'Middle text styling
+'skinparam sequenceMessageAlign center
+'skinparam sequenceMessageAlign direction
+autonumber
+
+actor "Agent" as Agent #SkyBlue
+participant ":System" as System
+
+Agent -> System : chooses the visit request to respond to
+activate System
+System --> Agent : request the message subject
+deactivate System
+Agent -> System : types the data
+activate System
+System --> Agent : request the message body
+deactivate System
+Agent -> System : types the data 
+activate System
+note right :  These services must be configured using a configuration\n file to enable using different platforms \n(e.g.: gmail, DEI's email service, etc.) 
+
+System--> Agent : asks to confirm the message
+deactivate System
+Agent -> System : confirms the message
+note right : When an Agent responds to a booking request \nthe list of booking requests should be updated \nto not show this request. 
+activate System
+System --> Agent : informs the message was sent
+deactivate System
+
+
+  
+
+@enduml

@@ -1,0 +1,81 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+'skinparam linetype orto
+
+skinparam classAttributeIconSize 0
+'---------File styling---------
+skinparam class {
+    BackgroundColor PeachPuff
+    ArrowColor RoyalBlue
+    BorderColor RoyalBlue
+}
+'left to right direction
+'User interface'
+
+Class BookingRequestsUI {
+}
+
+Class BookingRequestsController {
+    +bookingRequestsController()
+    +getVisitRepository()
+    +getCurrentPerson()
+    +getVisitsByDate()
+}
+
+Class VisitRepository {
+    - List<Visit> visitList
+    + getAgentByVisit()
+    +getVisitByAgentList()
+}
+
+Class Visit {
+    + Visit (property,name,phoneNumber,date,startTime,endTime,announcement)
+    +getProperty
+    +getAnnouncement
+}
+
+Class  Announcement {
+}
+
+Class Property {
+}
+
+
+Class Person {
+    - User user
+    - int passportNumber
+    - int taxNumber
+    - int phoneNumber
+    - Address address
+}
+
+Class Employee {
+    - String agencyId
+}
+
+Class Agent {
+}
+
+
+Class Repositories {
+    -Repositories()
+    +getInstance() : Repositories
+    +getVisitRepository()
+}
+
+BookingRequestsUI .> BookingRequestsController
+BookingRequestsController .> Repositories
+Repositories --> Repositories : instance
+Repositories -down-> VisitRepository
+VisitRepository .down.> Visit
+BookingRequestsController .down.> Person
+Person .down.> Employee
+Employee .down.> Agent
+Agent -> Visit : Confirms
+Visit -down-> Announcement: has an
+Visit --> Property : has a
+Announcement --> Agent : has an
+@enduml

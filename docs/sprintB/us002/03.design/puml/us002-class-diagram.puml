@@ -1,0 +1,104 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+'skinparam linetype orto
+
+skinparam classAttributeIconSize 0
+
+'left to right direction
+
+class Property {
+    -double areaInM2
+    -double distanceFromCityCentre
+    -String[] photoURL
+    -String typeProperty
+    -Address Address
+    -Home Home
+    -Deal Deal
+    +Property(areaInM2, distanceFromCityCentre, photoURL, typeProperty,
+Address, Housing, Deal)
+}
+
+class Address {
+    - String street
+    - String city
+    - String state
+    - int zipcode
+    - String distric
+    + setAdress(String street, String city, String state, int zipcode)
+    + getAdress(String street, String city, String state, int zipcode)
+}
+
+class Repositories {
+    - Repositories()
+    + getInstance() : Repositories
+    + getUsersRepository()
+    + getEmployeeRepository()
+    + getRequestRepository()
+    + getPropertyRepository()
+}
+
+class Employee{
+    - name
+    - passportNumber
+    - taxNumber
+    - email
+    - phoneNumber
+    - password
+}
+
+class PublishAnnouncementUI {
+}
+
+class PublishAnnouncementController {
+}
+
+class Home{
+    -numberOfBedrooms
+    -numberOfBathrooms
+    -numberOfParkingSpace
+    -availableEquipment
+    + Home(numberOfBedrooms, numberOfBathrooms,numberOfParkingSpace,availableEquipment)
+}
+
+class House{
+    -basement
+    -inhabitableLoft
+    -sunExposure
+    +House(basement, inhabitableLoft, sunExposure)
+}
+
+class UsersRepository {
+}
+
+class AnnouncementRepository {
+    + addAnnouncement()
+    + validateAnnouncement()
+}
+
+class Announcement {
+    - Request request
+    - Commission commission
+    + Announcement(request, commission)
+}
+
+'UI
+PublishAnnouncementUI ..> PublishAnnouncementController
+
+'Controller
+PublishAnnouncementController ..> Repositories : repositories
+PublishAnnouncementController ..> Announcement
+Repositories --> UsersRepository
+Repositories --> AnnouncementRepository
+
+AnnouncementRepository ..> Announcement
+Announcement --> Property
+Announcement --> Deal
+Announcement --> Employee
+
+Property --> Address
+Property *-- Home
+Home *-- House
+@enduml

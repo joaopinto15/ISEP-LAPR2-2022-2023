@@ -1,0 +1,173 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+'hide footbox
+actor "Network Manager" as ADM
+participant "AnalyseDealGUI" as GUI
+participant "AnalyseDealController" as GUIController
+
+participant "ImportBussinessController" as ImportController
+participant "TransformFileInAnnoucement" as Transformer
+participant "AnnoucementMapper" as Mapper
+participant "AnnoucementDTO" as DTO
+
+
+
+
+activate ADM
+
+ADM->GUI : Ask analyse done deals
+activate GUI
+ADM <-- GUI : showFileChooser()
+
+
+ADM -> GUI : choose a file
+
+GUI --> GUIController : selectedFile
+activate GUIController
+deactivate GUI
+GUIController -> ImportController : selectedFile
+deactivate GUIController
+
+activate ImportController
+ImportController->Transformer:String[][]data
+activate Transformer
+deactivate ImportController
+
+loop for each line of the file
+Transformer->Transformer:object1:String=data[i][object1]
+Transformer->Transformer:objectN:String=data[i][objectN]
+
+Transformer-->Annoucement**:create(object1,...,objectN)
+
+Transformer<--Annoucement:annoucementList
+
+end
+
+Transformer-->GUIController: annoucementList
+deactivate Transformer
+activate GUIController
+
+GUIController-->GUIController:annoucementList
+
+
+
+GUIController-->Mapper:toDTO(annoucementList)
+activate Mapper
+loop for each announcement
+Mapper->DTO**: annoucement=get(i)
+Mapper->Mapper:annoucementDTO=toDto(annoucement)
+Mapper->Mapper:add(annoucementDTO)
+end
+
+                                    Mapper --> GUIController : AnnoucementListDto
+                                    deactivate Mapper
+
+
+deactivate Mapper
+deactivate GUI
+deactivate GUIController
+
+GUI-->ADM:request(regressionModelType)
+ADM->GUI:selectec a regression model
+alt multilinear regression
+GUI-->ADM:request data(confidenceLevel)
+else simple regression
+GUI-->ADM:request data(confidenceLevel,dependentVariable)
+end
+ADM->GUI:types data(parameters)
+GUI->GUIController:parameters
+GUIController->"SimpleRegression":create(simpleRegressionVariable)
+GUIController<--"SimpleRegression":simpleRegressionVariable
+alt simple regression
+        loop importedDeal_acceptedList
+
+
+        alt apartment
+
+        GUIController -> GUIController : (Apartment) annoucementDTO.getRequest().getProperty();
+
+        GUIController -> "SimpleRegression" : addData(variable,price)
+        activate "SimpleRegression"
+        "SimpleRegression" --> GUIController : simpleRegressionVariable
+
+
+        else house
+        GUIController -> GUIController : (House) annoucementDTO.getRequest().getProperty();
+
+        GUIController -> "SimpleRegression" : addData(variable,price)
+        "SimpleRegression" --> GUIController : simpleRegressionVariable
+        end
+        deactivate "SimpleRegression"
+        end
+
+        GUIController->GUIController:simpleRegressionVariable
+        GUIController->"SimpleRegression":getSlope()
+                GUIController->"SimpleRegression":getSlope()
+
+                GUIController<--"SimpleRegression":getIntercept()
+                                GUIController<--"SimpleRegression":getIntercept()
+
+
+
+         GUIController -> GUIController : calculate yMedia
+
+
+
+
+                loop for each annoucement
+
+                GUIController -> GUIController : xMediaVariable
+
+                GUIController -> GUIController : yChapeu[i]
+
+                GUIController -> GUIController : yMenosYChapeuQuadrado[i]
+
+                GUIController -> GUIController : sVariable
+
+                end
+
+                 GUIController->GUIController:printConfidenceIntervalForSimple(importedDeal_acceptedList, confidenceLevel, simpleRegressionArea, xMediaArea, sArea)
+                GUIController->GUIController:printHypothesisTestsSimple(confidenceLevel, simpleRegressionArea, xMediaArea, importedDeal_acceptedList, sArea)
+
+    else if multilinear regression
+    loop importedDeal_acceptedList
+    GUIController->GUIController:y[annoucementIndex]= variable
+
+        alt apartment
+
+        GUIController -> GUIController : (Apartment) annoucementDTO.getRequest().getProperty();
+
+        GUIController -> "SimpleRegression" :x[annoucementIndex][variableIndex]= variable
+        activate "SimpleRegression"
+        "SimpleRegression" --> GUIController : simpleRegressionVariable
+
+
+        else house
+        GUIController -> GUIController : (House) annoucementDTO.getRequest().getProperty();
+
+        GUIController -> "SimpleRegression" : x[annoucementIndex][variableIndex]= variable
+        "SimpleRegression" --> GUIController : simpleRegressionVariable
+        end
+        deactivate "SimpleRegression"
+        end
+        GUIController->OLSMultipleLinearRegression:create(regression)
+        OLSMultipleLinearRegression-->GUIController:regression
+        GUIController->GUIController:createMatriz()
+        loop for each annoucement
+        GUIController->OLSMultipleLinearRegression:estimateRegressionParameters()
+        GUIController<--OLSMultipleLinearRegression:estimateRegressionParameters()
+        end
+         GUIController->GUIController:printHypithesisTestsMultiple(importedDeal_acceptedList, confidenceLevel, simpleRegressionArea, xMediaArea, sArea)
+                        GUIController->GUIController:printConfidenceIntervalMultiple(confidenceLevel, simpleRegressionArea, xMediaArea, importedDeal_acceptedList, sArea)
+    end
+    GUI <-- GUIController : results
+
+GUI --> ADM : results
+
+deactivate ADM
+@enduml

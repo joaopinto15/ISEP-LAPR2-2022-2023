@@ -1,0 +1,46 @@
+@startuml
+
+left to right direction
+actor "System Administrator" as SA  #pink;line:red;line.bold;text:red
+actor "Real State Agent" as RSA     #SkyBlue;line:blue;line.bold;text:blue
+actor "Property Owner" as PO        #RosyBrown;line:Brown;line.bold;text:brown
+actor Client as C                   #LightGreen;line:Green;line.bold;text:Green
+actor "Unregistered User" as UU     #LightGrey;line:Grey;line.bold;text:Grey    
+actor "Store manager" as SM         #LightSalmon;line:Salmon;line.bold;text:Salmon        
+actor "Network manager" as NM       #DimGrey;line:Black;line.bold;text:Black
+
+
+
+rectangle System {
+    usecase " UC 1 - Display listed properties" as UC1
+    usecase " UC 2 - Publish any sale announcement on the system" as UC2
+    usecase " UC 3 - Register a new Employee" as UC3
+    usecase " UC 4 - Submit a request for listing a proerty sale or rent, choosing the resposible agent" as UC4
+    usecase " UC 6 - Specify districts, municipalities and parish in the system" as UC6
+    usecase " UC 7 - Register in the system to buy, sell or rent properties" as UC7
+    usecase " UC 8 - See the list of property announcement requests made to myself and post the announcement. " as UC8
+    usecase " UC 9 - Leave a message to the agent to schedule a visit " as UC9
+    usecase " UC 10 - Place an order to purchase the property with the amount" as UC10
+    usecase " UC 11 - List real estate purchase orders to accept or decline a purchase order for a property and send a notification to the costumer." as UC11
+    usecase " UC 14 - Read the responses for appointment requests to accept or decline." as UC14
+}
+'implement al uc on diagram?
+'Unregistered User
+UU  --> UC1
+UU  --> UC7
+'Real State Agent
+RSA --> UC2
+RSA-->UC8
+RSA-->UC11
+'System Administrator
+SA  --> UC3
+SA  --> UC6
+'Property Owner
+PO   --> UC4
+'Client
+C-->UC9
+C-->UC10
+C-->UC14
+
+
+@enduml

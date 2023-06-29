@@ -1,0 +1,109 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+'skinparam linetype orto
+
+'skinparam classAttributeIconSize 0
+'---------File styling---------
+skinparam class {
+    BackgroundColor PeachPuff
+    ArrowColor RoyalBlue
+    BorderColor RoyalBlue
+}
+'left to right direction
+'User interface'
+
+class AnalyseDeal{
+    
+}
+
+class ListDealFile {
++ List<Announcement> transforminObject(String file)
+}
+
+class Apartment {
+    -int numberOfBedrooms
+    -int numberOfBathrooms
+    -int numberOfParkingSpace
+    -List<String> availableEquipment
+    + Apartment(land, numberOfBedrooms, numberOfBathrooms, numberOfParkingSpace, availableEquipment)
+}
+
+class House {
+    - boolean basement
+    - boolean inhabitableLoft
+    - String sunExposure
+    + House(apartment, basement, inhabitableLoft, sunExposure)
+}
+
+class Announcement {
+    - Request request
+    - Commission commission
+    - Date date
+    - List<Order> orders
+    + Announcement(request, commission, date)
+}
+
+class Request {
+    - Employee employee
+    - Person person
+    - Property property
+    - boolean isPending
+    + Request(employee, person, property, isPending)
+}
+
+
+class Order{
+    - Person person
+    - double price
+    - Date date
+}
+
+class Announcement {
+    - Property property
+    - User user
+    - ArrayList <Order> orders
+    +checkIfRequestPriceIsLowerThanAdvertisementPrice(requestPrice, announcement)
+}
+class Orders{
+    -ArrayList <Order> orders
+    +Orders()
+    +checkIfRequestPriceIsUnique(requestPrice, announcement)
+    + createOrder(requestPrice, user, date)
+
+}
+
+class OLSMultipleLinearRegression {
+    - QRDecomposition qr
+    - double threshold
+    + newSampleData(double[] y, double[][] x)
+    + estimateRegressionParameters()
+    + calculateRSquared()
+    + calculateAdjustedRSquared()
+    + estimateRegressionParametersStandardErrors()
+}
+
+'User Interface
+AnalyseDeal --> ListDealFile
+AnalyseDeal --> OLSMultipleLinearRegression
+
+
+
+Announcement "1" -- "1" Request
+Request --> Apartment
+Apartment *-- House
+Request --> House
+
+
+'Order
+ListDealFile ..> Announcement
+
+Announcement "1"-- "1" Orders
+
+Orders "1" -- "*" Order
+
+
+
+@enduml

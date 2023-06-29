@@ -1,0 +1,57 @@
+@startuml
+skinparam monochrome false
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD)
+
+' File sytling
+
+'alt sytling
+skinparam SequenceGroupHeaderFontColor green
+skinparam SequenceGroupFontColor blue
+skinparam SequenceGroupFontSize 15
+'Middle text styling
+'skinparam sequenceMessageAlign center
+'skinparam sequenceMessageAlign direction
+autonumber
+
+actor "System Administrator" as SA  #pink
+participant ":System" as System
+
+    SA -> System : asks to import business information
+    activate System
+
+    loop while file is not accepted
+        System --> SA : requests a file
+        deactivate System
+
+        SA -> System : choose the file
+        activate System
+
+        note right
+            -> The file need to be .csv
+        end note
+        System --> SA : requests cofirmation
+        deactivate System
+
+        SA -> System : confirms the data
+        activate System
+
+        autonumber 4.1
+
+        alt file is empty
+
+            System --> SA : displays the file is empty
+
+        else file with wrong format 
+
+            System --> SA : displays the file have the wrong format
+        end
+    end
+    autonumber 5
+
+    System --> SA : informs operation sucess
+
+
+@enduml

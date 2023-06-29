@@ -1,0 +1,39 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD) - Alternative One
+
+autonumber
+
+actor "System administrator" as SA
+participant ":System" as System
+
+    SA -> System : asks to register a store
+    activate System
+
+    alt registered adminnistrator
+        System --> SA : auto fills the admin information
+
+    else unregistered adminnistrator
+        autonumber 2.1
+        System --> SA : asks to admin information (name, citizenCardNumber,taxNumber,address,email,phoneNumber)
+        SA -> System : types the requested data
+    end   
+        System --> SA : requests the store data (id, designation,location, phone number and email)
+    deactivate System
+
+    SA -> System : types requested data
+    activate System
+
+        System --> SA : displays the information and asks to confirmation
+    deactivate System
+
+        SA -> System : confirms the data
+    activate System 
+
+        System --> SA : displays the Success of the operation 
+    deactivate System   
+
+@enduml

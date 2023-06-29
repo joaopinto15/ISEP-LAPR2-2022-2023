@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="pt.ipp.isep.dei.esoft.project.ui.gui.gui.AgentMenuGUI">
+   <Button fx:id="listBookingRequests" layoutX="234.0" layoutY="200.0" mnemonicParsing="false"
+           onAction="#switchToListBookingRequests" text="List Booking Requests"/>
+   <Label fx:id="lblAgentName" layoutX="247.0" layoutY="96.0" text="Welcome, Agent %s"/>
+   <Button fx:id="btnLogout" layoutX="274.0" layoutY="264.0" mnemonicParsing="false" onAction="#switchToMain"
+           text="Logout"/>
+</AnchorPane>

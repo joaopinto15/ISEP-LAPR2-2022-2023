@@ -1,0 +1,124 @@
+@startuml
+skinparam monochrome false
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+'alt sytling
+skinparam SequenceGroupHeaderFontColor green
+skinparam SequenceGroupFontColor blue
+skinparam SequenceGroupFontSize 15
+'Middle text styling
+'skinparam sequenceMessageAlign center
+'skinparam sequenceMessageAlign direction
+autonumber
+
+'hide footbox
+actor "Client" as Client #LightGreen
+participant ":OrderRequestUI" as UI
+participant ":OrderRequestController" as CTRL
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant "announcementRepository:\nAnnouncementRepository" as AnnouncementRepository
+participant "announcement\n:Announcement" as Announcement
+participant "OrderList\n:List<Order>" as Orders
+participant "order\n:Order" as Order
+
+
+activate Client
+
+        Client -> UI : asks to purchase a property
+
+        activate UI
+
+            UI -> CTRL** : create
+
+            UI -> CTRL : getAnnouncementRepository()
+            activate CTRL
+
+                CTRL -> RepositorySingleton : getInstance()
+                activate RepositorySingleton
+
+                    RepositorySingleton --> CTRL: repositories
+                deactivate RepositorySingleton
+
+                CTRL -> PLAT : getAnnouncementRepository()
+                activate PLAT
+
+                    PLAT --> CTRL: AnnouncementRepository
+                deactivate PLAT
+
+                CTRL -> AnnouncementRepository : getAnnouncements()
+                activate AnnouncementRepository
+
+                    AnnouncementRepository --> CTRL : AnnouncementList
+                deactivate AnnouncementRepository
+
+                CTRL --> UI : AnnouncementList
+            deactivate CTRL
+
+            UI --> Client : shows announcement list\n and asks to sleect one
+        deactivate UI
+
+    Client -> UI : selects a announcement
+    activate UI
+    opt if there is a pending offer
+
+        UI --> Client : asks the user to wait until the pending request is either accepted or rejected
+
+    end
+    loop While requestPrice <= advertisementPrice
+        UI --> Client : requests the price
+        deactivate UI
+
+        Client -> UI : types requested data
+        activate UI
+
+        UI -> CTRL : checkIfRequestPriceIsLowerThanAdvertisementPrice(requestPrice, announcement)
+        activate CTRL
+        CTRL -> CTRL : checkIfRequestPriceIsLowerThanAdvertisementPrice(requestPrice, announcement)
+        CTRL --> UI : answer
+        deactivate CTRL
+        
+    end 
+    alt requested price is unique
+        UI -> CTRL : checkIfRequestPriceIsUnique(requestPrice)
+        activate CTRL
+
+        CTRL --> UI : isUnique
+        deactivate CTRL
+        UI --> Client : shows all data and asks to confirm
+    else requested price is not unique
+        UI -> CTRL : checkIfRequestPriceIsUnique(requestPrice)
+        activate CTRL
+        
+        CTRL --> UI : notUnique
+        deactivate CTRL
+        UI --> Client : displays that there is already\n an order request with the same price and asks to confirm
+    end
+
+    Client -> UI : confirms the data
+    UI -> UI : getDate()
+    UI -> CTRL : createOrder(requestPrice, user, date)
+    activate CTRL
+    CTRL -> Announcement : createOrder(requestPrice, user)
+    activate Announcement
+    Announcement -> Orders: createOrder(requestPrice, user)
+    activate Orders
+    Orders -> Order** : createOrder(requestPrice, user)
+    activate Order
+    Order --> Orders : order
+    deactivate Order
+    Orders --> Announcement : order
+    deactivate Orders
+    Announcement --> CTRL : order
+    deactivate Announcement
+    CTRL --> UI : order
+    deactivate UI
+    deactivate CTRL
+
+
+    UI --> Client : informs operation sucess
+
+deactivate Client
+
+@enduml

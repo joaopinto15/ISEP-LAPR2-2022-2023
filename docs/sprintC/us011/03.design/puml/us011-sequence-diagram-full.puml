@@ -1,0 +1,89 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+'hide footbox
+actor "Agent" as A #RosyBrown
+participant ":VerifyAnnouncementUI" as UI
+participant ":CheckOrdersController" as CTRL
+participant "Announcement" as Announcement
+participant "AgentSession" as US
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant "AnnouncementRepository" as AnnouncementRepository
+participant "EmailRepository" as EmailRepository
+
+activate A
+
+A -> UI : asks check orders from a property
+activate UI
+
+UI -> CTRL** : create
+UI -> CTRL : getAnnouncementsByOrder()
+activate CTRL
+
+CTRL -> RepositorySingleton : getInstance()
+activate RepositorySingleton
+
+RepositorySingleton --> CTRL: repositories
+deactivate RepositorySingleton
+
+CTRL -> PLAT : getAnnouncementRepository()
+activate PLAT
+
+PLAT --> CTRL: AnnouncementRepository
+deactivate PLAT
+
+CTRL -> AnnouncementRepository : getAnnouncementList()
+activate AnnouncementRepository
+
+AnnouncementRepository --> CTRL : announcementList
+deactivate AnnouncementRepository
+
+CTRL -> CTRL: sort announcements by ascending date
+CTRL --> UI : AnnouncementList
+deactivate CTRL
+
+UI --> A : shows all announcements by order
+deactivate UI
+
+A -> UI : chose one announcement
+activate UI
+
+UI -> CTRL : getOrdersByOrder(Announcement announcement)
+activate CTRL
+
+CTRL -> CTRL: getOrders()
+CTRL -> CTRL: sort orders by descending price
+
+CTRL --> UI:OrderList
+deactivate CTRL
+
+UI --> A: shows all orders by order
+deactivate UI
+
+A -> UI: chose one order
+activate UI
+
+UI --> A: shows the validate options (Accept/Denied/Redo)
+
+A -> UI: chose one option
+deactivate UI
+
+alt option = Accept
+UI -> CTRL : acceptThisOrder(announcement, order)
+CTRL -> EmailRepository : Email(getEmployeeInSession(), person, subject, body)
+
+else option = Denied
+UI -> CTRL : removeThisOrder(announcement, order)
+CTRL -> EmailRepository : Email(getEmployeeInSession(), person, subject, body)
+
+else option = Skip
+UI -> UI : new CheckOrderUI.run()
+end
+
+deactivate A
+@enduml

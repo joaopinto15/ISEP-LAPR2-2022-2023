@@ -1,0 +1,70 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+'skinparam linetype orto
+
+'skinparam classAttributeIconSize 0
+'---------File styling---------
+skinparam class {
+    BackgroundColor PeachPuff
+    ArrowColor RoyalBlue
+    BorderColor RoyalBlue
+}
+'left to right direction
+'User interface'
+
+
+class ListDealGUI {
+    + initialize()
+    + showFileChooser()
+    + displayDeals()
+      + chooseFile()
+        + displayList()
+        + selectSortingType()
+        + displaySelectedDeal()
+
+}
+
+class DealDTO {
+    - dealId: String
+    - dealName: String
+    - dealDescription: String
+    - dealPrice: double
+    - dealCategory: String
+    - dealLocation: String
+}
+
+class ListDealGUIController {
+    - selectedFile: File
+    + showFileChooser()
+    + sortDeals()
+    + displayDeals()
+}
+
+class SortDealByArea {
+    + transformFileToAnnouncements()
+}
+
+class TransformFileInAnnouncement {
+    + processFile()
+}
+
+class ImportBusinessController {
+    + importDeals()
+}
+
+class DealMapper {
+    + mapToDealDTO()
+}
+
+
+ListDealGUIController --> SortDealByArea
+SortDealByArea --> TransformFileInAnnouncement
+TransformFileInAnnouncement --> ImportBusinessController
+ListDealGUIController --> DealMapper
+ListDealGUIController --> DealDTO
+ListDealGUI --> DealDTO
+DealMapper --> DealDTO
+@enduml

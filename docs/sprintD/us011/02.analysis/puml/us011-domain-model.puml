@@ -1,0 +1,128 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+'skinparam line-type or-tho
+left to right direction
+'skinparam classAttributeIconSize 0
+hide circle
+hide methods
+'---------File styling---------
+skinparam class {
+    BackgroundColor PeachPuff
+    ArrowColor RoyalBlue
+    BorderColor RoyalBlue
+}
+'------------|Actors|----------------
+
+class Agent
+
+class "Property Owner" as PO
+
+class Client {
+}
+
+class Property {
+    - type
+    - area
+    - distanceFromCityCenter
+    - photoURL
+}
+
+class Home {
+    - numberOfBedrooms
+    - numberOfBathrooms
+    - numberOfParkingSpace
+    - availableEquipment
+}
+
+class Land
+
+class Apartment
+
+class House {
+    - basement
+    - inhabitableLoft
+    - sunExposure
+}
+
+class Announcement {
+    - id
+    - state
+}
+
+class Order {
+    - requestPrice
+}
+
+class Address {
+    - street
+    - city
+    - state
+    - zipcode
+}
+
+class Deal {
+    - dealType
+}
+
+class Sale {
+    - propertyPrice
+}
+
+class Rent {
+    - propertyRent
+    - contractDuration
+}
+
+class Date {
+    - year
+    - month
+    - day
+}
+
+class Message {
+    - isEmail
+    - subject
+    - from
+    - to
+    - information
+}
+
+'-------------------connections------------------
+'Property Owner
+PO "1" -- "1.*" Announcement : request >
+'Announcement
+Announcement "1" -- "1" Property : has >
+
+'Agent
+Agent "1" -- "*" Announcement : publishes >
+Agent "1" -- "*" Order : send to  <
+
+'Client
+Client "1" -- "*" Announcement : has <
+Client "1" -- "1.*" Order : request >
+Client "1" -- "1" Message : receives >
+
+'Property
+Property "1" -- "1" Address : has >
+
+'Announcement
+Announcement "1" -- "1" Order : has <
+Property "1" -- "1" Deal : has >
+Announcement "1" -- "1" Date : has >
+
+'Deal
+Deal *-- Sale
+Deal *-- Rent
+
+'Order
+Order "1" -- "1" Date : has >
+
+'--------------------heritage--------------------
+Property <|-- Land : is a
+Property <|-- Home : is a
+Home <|-- Apartment : is a
+Home <|-- House : is a
+
+@enduml

@@ -1,0 +1,81 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+'skinparam linetype orto
+
+skinparam classAttributeIconSize 0
+
+'left to right direction
+
+
+class Repositories {
+    - Repositories()
+    + getInstance() : Repositories
+    + getAnnouncementRepository()
+    + getRequestRepository()
+}
+class Announcement {
+- Request request
+    - Commission commission
+    + Announcement(request, commission)
+}
+
+class Request{
+    - Property property
+    - Employee employee
+    - Person Person
+}
+
+class Agent {
+}
+
+class Person {
+- User user
+    - int passportNumber
+    - int taxNumber
+    - int phoneNumber
+    - Address address
+}
+class Employee {
+-Agency agency
+}
+
+class AnnouncementRepository{
+-List<Announcement> announcementList
++createAnnouncement()
+
+}
+
+class PostAnnouncementController {
++postAnnouncementController()
++getAnnouncementRepository()
++getRequestRepository()
++getRequestByDate()
++getEmployeeInSession()
+}
+
+class RequestRepository {
++getRequestList()
+}
+
+class PropertyAnnouncementsRequestUI {
++chooseRequest()
++createCommission()
++postAnnouncementController()
+}
+
+PropertyAnnouncementsRequestUI .> PostAnnouncementController
+PostAnnouncementController .> Repositories : Repositories
+PostAnnouncementController ..> Person
+Repositories --> AnnouncementRepository
+Repositories --> RequestRepository
+AnnouncementRepository .> Announcement
+RequestRepository ..> Request
+Repositories -> Repositories : instance
+
+Person <|-down- Employee : is a
+Employee <|-down- Agent : is a
+Agent -> Announcement : publishes
+@enduml

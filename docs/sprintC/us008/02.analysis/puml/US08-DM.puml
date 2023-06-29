@@ -1,0 +1,70 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+hide circle
+hide methods
+'---------File styling---------
+skinparam class {
+    BackgroundColor PeachPuff
+    ArrowColor RoyalBlue
+    BorderColor RoyalBlue
+}
+title US08-DM
+
+class Agent {
+}
+
+class Announcement {
+ - state
+    - price
+}
+
+class Property {
+- type
+    - area
+    - location
+    - distanceFromCityCenter
+    - photographs
+}
+
+class Home {
+- numberOfbedrooms
+    - numberOfbathrooms
+    - numberOfParkingSpace
+    - availableEquipment
+}
+
+class Land {
+}
+
+class Address {
+-street
+    -city
+    -state
+    -zipcode
+}
+
+class Employee {
+ - agencyDesignation
+}
+
+class User {
+- name
+    - citizenCardNumber
+    - taxNumber
+    - email
+    - phoneNumber
+    - password
+}
+
+.User <|-- .Employee : is a
+.Employee <|-- Agent : is a
+.Agent -- .Announcement : publishes >
+.Announcement -- .Property : has a >
+.Land <|-- .Property : is a
+.Home <|-- .Property : is a
+.Property -- .Address : has a >
+.Announcement -- .Agent : sent to >
+@enduml

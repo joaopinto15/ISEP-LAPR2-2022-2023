@@ -1,0 +1,83 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+'skinparam linetype ortho
+'left to right direction
+'skinparam classAttributeIconSize 0
+hide circle
+hide methods
+'---------File styling---------
+skinparam class {
+    BackgroundColor PeachPuff
+    ArrowColor RoyalBlue
+    BorderColor RoyalBlue
+}
+'------------|Actors|----------------
+class Person {
+    - name
+    - citizenCardNumber
+    - taxNumber
+    - email
+    - phoneNumber
+    - password
+}
+
+
+class Property{
+    - type
+    - area 
+    - distanceFromCityCenter
+    - photoURL
+
+}
+'add other caracteristics like land???
+
+class Employee {
+    - agencyDesignation
+}
+class Agent{
+
+}
+class "Network Manager" as NM{
+
+}
+class Agency{
+    - id
+    - designation
+    - phoneNumber
+    - email
+}
+class Order {
+    - requestPrice
+    - date
+}
+'-------------------connections------------------
+'Employee
+Employee "1" -- "*" NM : can be >
+
+'Announcement
+Announcement "1" -- "1" Property : has a >
+Announcement "1" -- "1" Agent : has an >
+
+'Agency
+Agency "1" -- "1..*" Agent : has >
+'Property   
+
+'Agent
+
+Person <|-- Employee : is a <
+Employee "1" -- "1" Agent : can be >
+
+'Network Manager
+NM "1" -- "1..*" Agency : manage >
+
+Agent "1" -- "*" Order : send to  <
+
+Announcement "1" -- "1" Order : has <
+
+
+'--------------------heritage--------------------
+
+
+@enduml

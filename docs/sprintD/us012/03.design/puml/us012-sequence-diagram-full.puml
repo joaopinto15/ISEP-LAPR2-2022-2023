@@ -1,0 +1,84 @@
+@startuml
+skinparam monochrome false
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+'hide footbox
+actor "System Admininstrator" as ADM #pink
+participant ":ImportBusinessDataUI" as UI
+participant ":ImportBusinessDataController" as CTRL
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant "announcementRepository:\nAnnouncementRepository" as AnnouncementRepository
+
+
+activate ADM
+
+        ADM -> UI : asks to import business information
+
+        activate UI
+
+        UI --> ADM : requests a file
+        deactivate UI
+
+        ADM -> UI : selects a file
+        activate UI
+
+        UI -> CTRL** : create
+
+        alt file format is valid 
+            UI -> CTRL : checkFileFormat(File file)
+            activate CTRL
+
+            CTRL -> UI : true
+            
+            deactivate CTRL
+            UI --> ADM : shows file format is valid
+
+        else file format is invalid
+            
+            UI -> CTRL : checkFileFormat(File file)
+            activate CTRL
+
+            CTRL -> UI : false
+            deactivate CTRL
+            UI --> ADM : shows file format is invalid
+        end
+        UI -> CTRL : readFile(File file)
+        activate CTRL
+        CTRL -> CTRL : String[][] data
+        CTRL -> Transformer : importBusinessData(data)
+        loop for each line of the file
+
+            Transformer->Transformer:object1:String=data[i][object1]
+            Transformer->Transformer:objectN:String=data[i][objectN]
+
+            Transformer-->Annoucement**:create(object1,...,objectN)
+
+            Transformer<--Annoucement:announcementList
+
+        end
+        Transformer --> CTRL : announcementList
+        CTRL -> RepositorySingleton : getInstance()
+        activate RepositorySingleton
+
+        RepositorySingleton --> CTRL: repositories
+        deactivate RepositorySingleton
+
+        CTRL -> PLAT : getAnnouncementRepository()
+        activate PLAT
+
+        PLAT --> CTRL: AnnouncementRepository
+        deactivate PLAT
+
+        CTRL -> AnnouncementRepository : save(AnnouncementList)
+        activate AnnouncementRepository
+        AnnouncementRepository --> CTRL : true
+        deactivate AnnouncementRepository
+        CTRL --> UI : true
+        deactivate CTRL
+        UI --> ADM : informs that the Announcement has been created and saved
+        deactivate UI              
+@enduml

@@ -1,0 +1,67 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+'skinparam linetype orto
+
+skinparam classAttributeIconSize 0
+'---------File styling---------
+skinparam class {
+    BackgroundColor PeachPuff
+    ArrowColor RoyalBlue
+    BorderColor RoyalBlue
+}
+'left to right direction
+'User interface'
+
+class Repositories{
+    -Repositories()
+    +getInstance() : Repositories
+    +getAnnouncementRepository()
+    +getRepository()
+}
+class ImportBusinessDataUI{
+    
+}
+class ImportBusinessDataController{
+    +checkFileFormat(String filePath)
+    +checkFileContent(String filePath)
+    +readFile(String filePath)
+    +importData(String [][] data)
+}
+class Announcement{
+    - Request request 
+    - Commission commission
+    - Date date
+    - List<Order> orders
+}
+class AnnouncementRepository{
+    - AnnouncementList : List<Announcement>
+    + saveAnnouncement(Announcement announcement)
+}
+class TransformFileInAnnouncement{
+    +transforminObject(String[][]data,int numberOfLines)
+}
+
+
+'User Interface
+ImportBusinessDataUI --> ImportBusinessDataController
+
+'Controller
+ImportBusinessDataController --> Repositories
+ImportBusinessDataController ..> AnnouncementRepository
+ImportBusinessDataController --> TransformFileInAnnouncement
+TransformFileInAnnouncement ..> Announcement
+
+
+'Repositories
+Repositories --> Repositories : instance
+Repositories --> AnnouncementRepository
+
+
+'Announcement
+AnnouncementRepository ..> Announcement
+
+
+@enduml

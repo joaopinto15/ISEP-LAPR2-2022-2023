@@ -1,0 +1,77 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+'skinparam linetype orto
+
+'skinparam classAttributeIconSize 0
+'---------File styling---------
+skinparam class {
+    BackgroundColor PeachPuff
+    ArrowColor RoyalBlue
+    BorderColor RoyalBlue
+}
+'left to right direction
+'User interface'
+
+class PropertySubsetServiceUI{
+
+}
+
+class PropertySubsetServiceController{
+
+}
+
+class Repositories {
+    - Repositories()
+    + getInstance() : Repositories
+    + getAnnouncementRepository()
+}
+
+class AgencyRepository {
+    + List<Agency> getAgencies()
+}
+
+class Agency {
+    - String id
+    - Address address
+    - String designation
+    - String phoneNumber
+    - Email emailAddress
+    + Agency(id, address, designation, phoneNumber, emailAddress)
+}
+
+class Address {
+    - String street
+    - String city
+    - String state
+    - int zipcode
+    - String district
+    + setAddress(street, city, state, zipcode)
+    + getAddress()
+}
+
+class Email {
+    - String email
+    + Email(email)
+}
+
+'User Interface
+PropertySubsetServiceUI --> PropertySubsetServiceController
+
+
+
+PropertySubsetServiceController --> Repositories
+PropertySubsetServiceController --> Agency
+Repositories --> Repositories : instance
+Repositories --> AgencyRepository
+
+'Agency
+AgencyRepository ..> Agency
+Agency "1" -- "1" Email
+Agency "1" -- "1" Address
+
+
+
+@enduml

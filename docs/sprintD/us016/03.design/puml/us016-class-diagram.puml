@@ -1,0 +1,61 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+'skinparam linetype orto
+
+'skinparam classAttributeIconSize 0
+'---------File styling---------
+skinparam class {
+    BackgroundColor PeachPuff
+    ArrowColor RoyalBlue
+    BorderColor RoyalBlue
+}
+'left to right direction
+'User interface'
+
+class RespondVisitRequestUI{
+    
+}
+class RespondVisitRequestController{
+    +getVisit()
+    +notifyClient(Visit visit, String text)
+    +deleteVisit(Visit visit)
+}
+class VisitRepository{
+    +deleteVisit(Visit visit)
+}
+class Repositories{
+    -Repositories()
+    +getInstance() : Repositories
+    +getVisitRepository()
+    +getRepository()
+}
+class Message {
+    - boolean isEmail
+    - String subject
+    - Employee from
+    - Person to
+    - String information
+    + getMessageBody()
+    + send()
+    + save()
+}
+
+
+'User Interface
+RespondVisitRequestUI --> RespondVisitRequestController
+
+'Controller
+RespondVisitRequestController --> Repositories
+RespondVisitRequestController..> Message
+RespondVisitRequestController..> VisitRepository
+
+'Repositories
+Repositories --> Repositories : instance
+Repositories ..> VisitRepository
+
+
+
+@enduml

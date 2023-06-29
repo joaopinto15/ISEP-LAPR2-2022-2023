@@ -1,0 +1,195 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+'hide footbox
+actor "Agent" as A #RosyBrown
+participant ":PublishAnnouncementUI" as UI
+participant ":PublishAnnouncementController" as CTRL
+participant "Announcement" as Announcement
+participant "AgentSession" as US
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant "PersonRepository:\n" as PersonRepository
+participant "AuthenticationRepository:\n" as AuthenticationRepository
+participant "AnnouncementRepository:\n" as AnnouncementRepository
+
+activate A
+
+A -> UI : asks to publish an announcement
+activate UI
+
+UI -> CTRL** : create
+
+UI -> CTRL : getEmployeeInSession
+activate CTRL
+
+CTRL -> RepositorySingleton : getInstance()
+activate RepositorySingleton
+
+RepositorySingleton --> CTRL: repositories
+deactivate RepositorySingleton
+
+CTRL -> PLAT : getAuthenticationRepository()
+activate PLAT
+
+PLAT --> CTRL: AuthenticationRepository
+deactivate PLAT
+
+CTRL -> AuthenticationRepository : getCurrentUserSession().getUserId()
+activate AuthenticationRepository
+
+AuthenticationRepository --> CTRL : idInSession
+deactivate AuthenticationRepository
+
+CTRL -> RepositorySingleton : getInstance()
+activate RepositorySingleton
+
+RepositorySingleton --> CTRL: repositories
+deactivate RepositorySingleton
+
+CTRL -> PLAT : getPersonRepository()
+activate PLAT
+
+PLAT --> CTRL: PersonRepository
+deactivate PLAT
+
+CTRL -> PersonRepository : getPersonById(idInSession)
+activate PersonRepository
+
+PersonRepository --> CTRL : employeeInSession
+deactivate PersonRepository
+
+CTRL --> UI : employeeInSession
+deactivate CTRL
+
+UI -> CTRL : getClientList()
+activate CTRL
+
+CTRL -> RepositorySingleton : getInstance()
+activate RepositorySingleton
+
+RepositorySingleton --> CTRL: repositories
+deactivate RepositorySingleton
+
+CTRL -> PLAT : getPersonRepository()
+activate PLAT
+
+PLAT --> CTRL: PersonRepository
+deactivate PLAT
+
+CTRL -> PersonRepository : getClients()
+activate PersonRepository
+
+PersonRepository --> CTRL : Clients
+deactivate PersonRepository
+
+CTRL --> UI : ClientList
+deactivate CTRL
+
+UI --> A : requests to select a Client from the list
+deactivate UI
+
+A -> UI : choose a Client
+activate UI
+
+UI --> A : requests the property type (land, apartment, house)
+deactivate UI
+
+A -> UI : types respective data
+activate UI
+
+UI --> A : request the address, area and distance from city centre
+
+loop one or more
+UI --> A : request photoURL
+A -> UI : types respective data
+end
+
+UI --> A : request deal type (sale, rent)
+A -> UI : types respective data
+
+alt sale
+UI --> A : request sale price
+A -> UI : types respective data
+
+UI -> UI : new Sale(price)
+
+else rent
+UI --> A : request rent price and contract duration
+A -> UI : types respective data
+
+UI -> UI : new Rent(price, contractDuration)
+end
+
+UI -> UI : new Land(address, area, distanceFromCityCenter, photoURL, Deal)
+
+alt apartment or house
+
+UI --> A : request the number of bedrooms, number of bathrooms and number of parking spaces
+A -> UI : types requested data
+
+loop (one or more)
+UI --> A : request the available equipment
+A -> UI : types requested data
+end
+
+UI -> UI : new Apartment(Land, numberOfBedrooms, numberOfBathrooms, numberOfParkingSpaces)
+end
+
+alt house
+UI --> A : request if it has basement, inhabitable loft and how is the sun exposure (high, low, medium)
+A -> UI : types respective data
+
+UI -> UI : new House(apartment, basement, inhabitableLoft, sunExposure)
+end
+
+UI -> UI : new Request(employeeInSession, client, property, false)
+deactivate UI
+
+UI --> A : request the commission type (fix amount, percentage)
+activate UI
+
+A -> UI : types respective data
+
+alt fix amount
+UI --> A : request the commission fix amount value
+A -> UI : types respective data
+
+UI -> UI : Commission(value, false)
+
+else percentage
+UI --> A : request the commission percentage value
+A -> UI : types respective data
+
+UI -> UI : Commission(value, true)
+end
+
+UI -> UI : new Announcement(request, commission)
+deactivate UI
+
+UI --> A : show and ask to confirm
+A -> UI : types respective data
+
+activate UI
+
+alt confirms
+UI -> CTRL : submitAnnouncement(request, commission)
+
+CTRL -> AnnouncementRepository : saveAnnouncement(announcement)
+CTRL -> AnnouncementRepository : validateAnnouncement(announcement)
+AnnouncementRepository --> CTRL : boolean
+
+alt boolean
+UI --> A : Operation success
+end
+
+else no confirms
+UI --> A : Operation canceled
+end
+
+deactivate A
+@enduml

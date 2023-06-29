@@ -1,0 +1,96 @@
+@startuml
+'alt styling
+skinparam SequenceGroupHeaderFontColor green
+skinparam SequenceGroupFontColor blue
+skinparam SequenceGroupFontSize 15
+'Middle text styling
+'skinparam sequenceMessageAlign center
+'skinparam sequenceMessageAlign direction
+autonumber
+
+actor "Agent" as A
+
+participant ":System" as System
+
+activate A
+
+        A -> System : asks to receive data
+    activate System
+
+        System --> A : receive data
+    deactivate System
+
+    'if statement
+    alt Accept
+        System --> A : requests the property type (house,apartment,land) and business type (sell or rent)
+    deactivate System
+
+        A -> System : types the requested data
+    activate System
+
+        alt land
+            alt sell
+                autonumber 5
+                System-->A : request the land characteristics
+
+                A -> System : types requested data
+            else rent
+                autonumber 5
+                System-->A : request the land characteristics and the contract duration
+
+                A -> System : types requested data
+            end
+
+        else apartment
+            alt sell
+                autonumber 5
+                System-->A : request the apartment characteristics
+
+                A -> System : types requested data
+
+            else rent
+                autonumber 5
+                System-->A : request the apartment characteristics and the contract duration
+
+                A -> System : types requested data
+            end
+
+        else house
+            alt sell
+                autonumber 5
+                System-->A : request the house characteristics
+
+                A -> System : types requested data
+
+            else rent
+                autonumber 5
+                System-->A : request the house characteristics and the contract duration
+
+                A -> System : types requested data
+            end
+
+        end
+
+        autonumber 7
+        System-->A : request the commission
+
+        A -> System : types requested data
+
+        System --> A : shows the data and ask confirmation
+        deactivate System
+
+        A -> System : confirms the data
+        activate System
+
+    else Denied
+        autonumber 5
+        A -> System : reject the requested data
+
+        A -> System : confirms the data
+    end
+
+    'Final Part
+    autonumber 11
+    System --> A : Displays operation success
+    deactivate System
+@enduml

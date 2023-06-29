@@ -1,0 +1,45 @@
+@startuml
+skinparam monochrome false
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD) - Alternative One
+
+' File sytling 
+
+'alt sytling
+skinparam SequenceGroupHeaderFontColor green
+skinparam SequenceGroupFontColor blue
+skinparam SequenceGroupFontSize 15
+'Middle text styling
+'skinparam sequenceMessageAlign center
+'skinparam sequenceMessageAlign direction
+autonumber
+
+actor "Unregister User" as UU #LightGrey
+participant ":System" as System
+
+    UU -> System : asks to create a account
+    activate System
+
+    System --> UU : requests user's information
+    deactivate System
+
+    UU -> System : types data (name, passport card number, tax number\n, address, email,phone number, password)
+    activate System
+    note right
+     ->the Address is not mandatory
+
+     -> a password of seven alphanumeric characters, 
+     including three capital letters and two digits
+    end note
+    System --> UU : shows all data and requests cofirmation
+    deactivate System
+
+    UU -> System : confirms the data
+    activate System
+
+    System --> UU : informs operation sucess
+
+
+@enduml

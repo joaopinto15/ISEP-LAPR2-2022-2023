@@ -1,0 +1,12 @@
+#-#-#-#-#-#-#
+From: John Doe at Real Estate USA <noreply@example.com> Phone number:123456789
+To: client@this.app
+Subject: Dear John DoeYour visit has been scheduled!
+ Date: Monday, 19 of June of 2023
+Time: 09:12:43 AM
+
+Agent Message:
+  The message was send
+
+This is an automated message from the system. Please do not reply to this email.
+#-#-#-#-#-#-#

@@ -1,0 +1,97 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+'hide footbox
+actor "Network Manager" as ADM
+participant "ListDealGUI" as GUI
+participant "ListDealGUIController" as GUIController
+participant "SortDealByArea" as SortDeal
+participant "ImportBussinessController" as ImportController
+participant "TransformFileInAnnoucement" as Transformer
+participant "AnnoucementMapper" as Mapper
+participant "AnnoucementDTO" as DTO
+
+
+
+
+activate ADM
+
+ADM->GUI : initialize
+activate GUI
+ADM <-- GUI : showFileChooser()
+
+
+ADM -> GUI : choose a file
+
+GUI --> GUIController : selectedFile
+activate GUIController
+deactivate GUI
+GUIController -> ImportController : selectedFile
+deactivate GUIController
+
+activate ImportController
+ImportController->Transformer:String[][]data
+activate Transformer
+deactivate ImportController
+
+loop for each line of the file
+Transformer->Transformer:object1:String=data[i][object1]
+Transformer->Transformer:objectN:String=data[i][objectN]
+
+Transformer-->Annoucement**:create(object1,...,objectN)
+
+Transformer<--Annoucement:annoucementList
+
+end
+
+Transformer-->GUIController: annoucementList
+deactivate Transformer
+activate GUIController
+
+GUIController-->GUIController:annoucementList
+
+ADM->GUI:choose the sort method by algorithm
+activate GUI
+
+GUI->GUIController:seletedSortType
+deactivate GUI
+GUIController->SortDeal:sort(annoucementList)
+
+SortDeal-->GUIController:annoucementList
+
+GUIController-->GUIController:annoucementList
+
+GUIController-->Mapper:toDTO(annoucementList)
+activate Mapper
+loop for each announcement
+Mapper->DTO**: annoucement=get(i)
+Mapper->Mapper:annoucementDTO=toDto(annoucement)
+Mapper->Mapper:add(annoucementDTO)
+end
+
+                                    Mapper --> GUIController : AnnoucementListDto
+                                    deactivate Mapper
+
+
+deactivate Mapper
+
+GUIController -> GUI : displayDeals(announcementDTOList)
+ deactivate GUIController
+activate GUI
+
+GUI --> ADM : Display list of deals by area
+
+GUI <-- ADM : Select a deal
+
+ADM <-- GUI : Display the annoucement deal
+
+deactivate GUI
+deactivate GUIController
+deactivate ADM
+
+
+@enduml

@@ -1,0 +1,25 @@
+@startuml
+'alt styling
+skinparam SequenceGroupHeaderFontColor green
+skinparam SequenceGroupFontColor blue
+skinparam SequenceGroupFontSize 15
+'Middle text styling
+'skinparam sequenceMessageAlign center
+'skinparam sequenceMessageAlign direction
+autonumber
+autonumber
+
+actor "Agent" as AGT
+participant ":System" as System
+
+activate AGT
+
+AGT -> System : asks to see agency subsets
+activate System
+
+
+System -->AGT :shows the subsets with same number of agencies
+deactivate System
+
+
+@enduml

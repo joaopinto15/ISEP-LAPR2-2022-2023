@@ -1,0 +1,88 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+'skinparam linetype ortho
+'left to right direction
+skinparam classAttributeIconSize 0
+'---------File styling---------
+skinparam class {
+    BackgroundColor PeachPuff
+    ArrowColor RoyalBlue
+    BorderColor RoyalBlue
+}
+
+class ""ListPropertiesUI" as UI
+class ""ListPropertController" as CONTROL{
++ListPropertiesController(PropertyrRepository)
++showProperties()
+}
+class Repositories{
++getPropertyrRepository()
++getInstance()
+}
+class "PropertyrRepository" as PROP_REP{
++getPropertiesByType(type)
++filterByType()
++filterByDeal()
++filterByNumberOfBathfrooms()
++filterByNumberOfBedrooms()
+
+}
+
+
+abstract class Property{
+   - double areaInM2
+       - double distanceFromCityCenter
+       - ArrayList <String> photoURL
+       - String typeProperty
+       - Address address
+
+}
+
+class Land{
+
+}
+class Apartment{
+
+}
+class House{
+    - boolean basement
+        - boolean inhabitableLoft
+        - String sunExposure
+}
+
+abstract class Home {
+    -int numberOfBedrooms
+        -int numberOfBathrooms
+        -int numberOfParkingSpace
+        -ArrayList <String> availableEquipment
+}
+class Properties_By_Price{
++compare(price1:double,price2:double):int
+'ascending or descending
+}
+
+class Properties_By_City{
++compare(parish1:String,parish2:String):int
+'ordem alfabetica
+}
+
+
+'--------------------heritage--------------------
+.Property <|-- .Land : is a
+.Property <|-- .Home : is a
+.Home <|-- .Apartment : is a
+.Home <|-- .House : is a
+'------------------------------------------------
+UI ..> CONTROL
+CONTROL ..> Repositories
+Repositories -->PROP_REP
+CONTROL ...> Property
+PROP_REP--->Property
+CONTROL ..> PROP_REP
+
+
+PROP_REP"1"..>"1"Properties_By_City
+PROP_REP"1"..>"1"Properties_By_Price
+@enduml

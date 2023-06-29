@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="556.0" prefWidth="853.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pt.ipp.isep.dei.esoft.project.ui.gui.gui.BookingRequestsGUI">
+   <top>
+      <Label text="Booking Request List :" textAlignment="CENTER" BorderPane.alignment="BOTTOM_CENTER">
+         <font>
+            <Font name="System Bold" size="19.0" />
+         </font>
+      </Label>
+   </top>
+   <bottom>
+      <FlowPane alignment="CENTER" prefHeight="107.0" prefWidth="618.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="btnListA" mnemonicParsing="false" onAction="#showBookingRequestListBubbleSort" text="Sort by Ascending">
+               <font>
+                  <Font size="15.0" />
+               </font>
+               <FlowPane.margin>
+                  <Insets right="10.0" />
+               </FlowPane.margin>
+            </Button>
+            <Button fx:id="btnListD" mnemonicParsing="false" onAction="#showBookingRequestListBubbleSortDescending" text="Sort by Descending">
+               <font>
+                  <Font size="15.0" />
+               </font>
+               <FlowPane.margin>
+                  <Insets right="10.0" />
+               </FlowPane.margin>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#switchToAgentMenu" text="Go Back" />
+         </children>
+      </FlowPane>
+   </bottom>
+   <center>
+      <ListView fx:id="listViewVisits" prefHeight="216.0" prefWidth="600.0" BorderPane.alignment="CENTER" />
+   </center>
+   <left>
+      <AnchorPane prefHeight="273.0" prefWidth="195.0" BorderPane.alignment="CENTER">
+         <children>
+            <DatePicker fx:id="datePickerS" layoutX="13.0" layoutY="77.0" onAction="#refreshList" promptText="Enter the Start Date" />
+            <DatePicker fx:id="datePickerE" layoutX="13.0" layoutY="164.0" onAction="#refreshList" promptText="Enter the End Date" />
+            <Label layoutX="14.0" layoutY="59.0" text="Start Date" />
+            <Label layoutX="13.0" layoutY="146.0" text="End Date" />
+         </children>
+      </AnchorPane>
+   </left>
+</BorderPane>

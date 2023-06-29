@@ -1,0 +1,104 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+'skinparam linetype ortho
+left to right direction
+'skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+'---------File styling---------
+skinparam class {
+    BackgroundColor PeachPuff
+    ArrowColor RoyalBlue
+    BorderColor RoyalBlue
+}
+
+'------------|Actors|----------------'
+class Agency{
+    - id
+    - designation
+    - phoneNumber
+    - email
+}
+
+class Commission {
+    -type
+    -value
+}
+
+class Anouncement{
+    - state
+    - price
+}
+
+class Property{
+    - type
+    - area
+    - location
+    - distanceFromCityCenter
+    - photographs
+}
+
+class Lease{
+    -contractDuration
+}
+
+class Address{
+    -street
+    -city
+    -state
+    -zipcode
+}
+
+class Home {
+    - numberOfbedrooms
+    - numberOfbathrooms
+    - numberOfParkingSpace
+    - availableEquipment
+}
+
+class Land {
+
+}
+
+class House{
+    - basement
+    - inhabitableLoft
+    - sunExposure
+}
+
+'-------------------connections------------------'
+'Agency'
+Agency "1" -- "1..*" Agent : has >
+Agency "1" -- "1" Address : has >
+
+'Commission'
+Commission "1" -- "1" Anouncement : has <
+
+'Agent'
+Agent "1" -- "1..*" Commission : set >
+Agent "1" -- "*" Anouncement : publishes >
+Agent "1" -- "*" Order :   < send to
+
+'Anouncement'
+Anouncement "1" -- "1" Property : has >
+Anouncement "1" -- "1" Agent : send to >
+Anouncement "1" -- "1" Sale : can be >
+Anouncement "1" -- "1" Lease : can be >
+Anouncement "1" -- "1" Order : has <
+
+'Client'
+Client "1" -- "*" Anouncement : see >
+Client "1" -- "1..*" Order : request >
+
+'Property'
+Property "1" -- "1" Address : has >
+
+'--------------------heritage--------------------'
+.Property <|-- .Land : is a
+.Property <|-- .Home : is a
+.Home <|-- .Apartment : is a
+.Home <|-- .House : is a
+@enduml
